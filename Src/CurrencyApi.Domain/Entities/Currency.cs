@@ -1,5 +1,3 @@
-using System;
-
 namespace CurrencyApi.Domain.Entities
 {
     public class Currency
