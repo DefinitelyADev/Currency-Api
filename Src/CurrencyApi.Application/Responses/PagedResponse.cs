@@ -7,7 +7,7 @@ namespace CurrencyApi.Application.Responses
         public virtual int PageNumber { get; set; }
         public int TotalCount { get; set; }
 
-        public PagedResponse(IEnumerable<T> data, int totalCount, int pageSize) : base(data)
+        public PagedResponse(IEnumerable<T> data, int totalCount) : base(data)
         {
             TotalCount = totalCount;
             Succeeded = true;
