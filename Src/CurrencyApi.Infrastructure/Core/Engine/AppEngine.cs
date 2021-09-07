@@ -195,6 +195,33 @@ namespace CurrencyApi.Infrastructure.Core.Engine
             IServiceProvider? sp = GetServiceProvider();
             return sp?.GetService(type);
         }
+        
+        /// <summary>
+        /// Resolve required dependency
+        /// </summary>
+        /// <typeparam name="T">Type of resolved service</typeparam>
+        /// <returns>Resolved service</returns>
+        /// <exception cref="InvalidOperationException">Throws an invalid operation exception if the service provider is null or the requested service could not be found.</exception>
+        public T ResolveRequired<T>() where T : class
+        {
+            return (T)ResolveRequired(typeof(T));
+        }
+
+        /// <summary>
+        /// Resolve required dependency
+        /// </summary>
+        /// <param name="type">Type of resolved service</param>
+        /// <returns>Resolved service</returns>
+        /// <exception cref="InvalidOperationException">Throws an invalid operation exception if the service provider is null or the requested service could not be found.</exception>
+        public object ResolveRequired(Type type)
+        {
+            IServiceProvider? sp = GetServiceProvider();
+
+            if (sp == null)
+                throw new InvalidOperationException("Cannot resolve service from a null service provider.");
+            
+            return sp.GetRequiredService(type);
+        }
 
         /// <summary>
         /// Resolve dependencies

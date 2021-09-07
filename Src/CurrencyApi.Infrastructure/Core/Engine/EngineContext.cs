@@ -31,7 +31,7 @@ namespace CurrencyApi.Infrastructure.Core.Engine
         #region Methods
 
         /// <summary>
-        /// Create a static instance of the Opencomm engine.
+        /// Create a static instance of the application engine.
         /// </summary>
         [MethodImpl(MethodImplOptions.Synchronized)]
         public static IEngine Create()

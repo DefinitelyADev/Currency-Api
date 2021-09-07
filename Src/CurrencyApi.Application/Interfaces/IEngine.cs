@@ -44,6 +44,22 @@ namespace CurrencyApi.Application.Interfaces
         /// <param name="type">Type of resolved service</param>
         /// <returns>Resolved service</returns>
         object? Resolve(Type type);
+        
+        /// <summary>
+        /// Resolve required dependency
+        /// </summary>
+        /// <typeparam name="T">Type of resolved service</typeparam>
+        /// <returns>Resolved service</returns>
+        /// <exception cref="InvalidOperationException">Throws an invalid operation exception if the service provider is null or the requested service could not be found.</exception>
+        T ResolveRequired<T>() where T : class;
+
+        /// <summary>
+        /// Resolve required dependency
+        /// </summary>
+        /// <param name="type">Type of resolved service</param>
+        /// <returns>Resolved service</returns>
+        /// <exception cref="InvalidOperationException">Throws an invalid operation exception if the service provider is null or the requested service could not be found.</exception>
+        object ResolveRequired(Type type);
 
         /// <summary>
         /// Resolve dependencies

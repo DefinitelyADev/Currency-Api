@@ -1,5 +1,10 @@
-﻿using CurrencyApi.Infrastructure.Core.Engine;
+﻿using CurrencyApi.Application.Interfaces;
+using CurrencyApi.Infrastructure.Core.Engine;
+using CurrencyApi.Infrastructure.Data;
+using CurrencyApi.Infrastructure.Data.Contexts;
+using CurrencyApi.Infrastructure.Data.Settings;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace CurrencyApi.Infrastructure.Extensions
@@ -17,17 +22,16 @@ namespace CurrencyApi.Infrastructure.Extensions
 
         public static void StartEngine(this IApplicationBuilder application)
         {
-            var engine = EngineContext.Current;
+            IEngine engine = EngineContext.Current;
 
             //further actions are performed only when the database is installed
             if (DataSettingsManager.IsDatabaseInstalled())
             {
-
-
 #if !DEBUG      //prevent save the update migrations into the DB during the developing process
-                var migrationManager = EngineContext.Current.Resolve<IMigrationManager>();
-                migrationManager.MigrateUpAsync().Wait();
+                ApplicationDbContext dbContext = engine.ResolveRequired<ApplicationDbContext>();
+                dbContext.Database.MigrateAsync().Wait();
 #endif
+
                 //log application start
                 engine.Resolve<ILogger<EngineContext>>().LogInformation("Application started");
             }
