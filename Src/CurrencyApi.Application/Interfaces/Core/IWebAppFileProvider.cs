@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.Extensions.FileProviders;
 
-namespace CurrencyApi.Application.Interfaces
+namespace CurrencyApi.Application.Interfaces.Core
 {
      /// <summary>
     /// A file provider abstraction

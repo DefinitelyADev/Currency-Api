@@ -1,6 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CurrencyApi.Application.Extensions;
+using CurrencyApi.Application.Interfaces.Services;
+using CurrencyApi.Application.Requests.Currency;
+using CurrencyApi.Application.Responses;
+using CurrencyApi.Application.Results;
 using CurrencyApi.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -11,18 +16,65 @@ namespace CurrencyApi.Presentation.Controllers
     [Route("[controller]")]
     public class CurrencyController : ControllerBase
     {
-        private readonly ILogger<CurrencyController> _logger;
+        private readonly ICurrencyService _currencyService;
 
-        public CurrencyController(ILogger<CurrencyController> logger)
+        public CurrencyController(ICurrencyService currencyService)
         {
-            _logger = logger;
+            _currencyService = currencyService;
         }
 
         [HttpGet]
-        public async Task<IEnumerable<Currency>> Get()
+        public async Task<IActionResult> Get([FromQuery] GetCurrencyRequest request)
         {
+            PagedResult<Currency> result = await _currencyService.GetAsync(request);
+
+            if (result.Succeeded)
+                return Ok(result.ToResponse());
+
+            return BadRequest(new Response<GetCurrencyRequest>("Could not get currency.").WithErrors(result.Errors).WithData(request));
+        }
+
+        [HttpGet("{id:int}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            var result = await _currencyService.GetByIdAsync(id);
+
             await Task.Delay(1000);
-            return Enumerable.Empty<Currency>();
+            return Ok(new Currency("", "", 5, 2));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] CreateCurrencyRequest request)
+        {
+            CreateCurrencyResult result = await _currencyService.CreateAsync(request);
+
+            if (result.Succeeded)
+                return CreatedAtAction(nameof(GetById), new {id = result.Data.Id}, result.Data);
+
+            return BadRequest(new Response<CreateCurrencyRequest>("Could not create currency.").WithErrors(result.Errors).WithData(request));
+
+        }
+
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> Update(int id, UpdateCurrencyRequest request)
+        {
+            UpdateCurrencyResult result = await _currencyService.UpdateAsync(request);
+
+            if (result.Succeeded)
+                return NoContent();
+
+            return BadRequest(new Response<UpdateCurrencyRequest>($"Could not update currency with id {id}.").WithErrors(result.Errors).WithData(request));
+        }
+
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            DeleteCurrencyResult result = await _currencyService.DeleteAsync(id);
+
+            if (result.Succeeded)
+                return NoContent();
+
+            return BadRequest(new Response<object>($"Could not delete currency.").WithErrors(result.Errors).WithData(new { Id = id}));
         }
     }
 }

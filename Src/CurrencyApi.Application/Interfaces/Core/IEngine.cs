@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace CurrencyApi.Application.Interfaces
+namespace CurrencyApi.Application.Interfaces.Core
 {
     /// <summary>
     /// Classes implementing this interface can serve as a portal for the various services composing the App engine.
@@ -44,7 +44,7 @@ namespace CurrencyApi.Application.Interfaces
         /// <param name="type">Type of resolved service</param>
         /// <returns>Resolved service</returns>
         object? Resolve(Type type);
-        
+
         /// <summary>
         /// Resolve required dependency
         /// </summary>

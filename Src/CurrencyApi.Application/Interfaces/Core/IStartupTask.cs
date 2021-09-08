@@ -1,4 +1,4 @@
-﻿namespace CurrencyApi.Application.Interfaces
+﻿namespace CurrencyApi.Application.Interfaces.Core
 {
     /// <summary>
     /// Interface which should be implemented by tasks run on startup

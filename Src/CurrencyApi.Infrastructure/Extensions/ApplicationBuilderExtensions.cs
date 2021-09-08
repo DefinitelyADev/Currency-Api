@@ -1,10 +1,7 @@
-﻿using CurrencyApi.Application.Interfaces;
+﻿using CurrencyApi.Application.Interfaces.Core;
 using CurrencyApi.Infrastructure.Core.Engine;
-using CurrencyApi.Infrastructure.Data;
-using CurrencyApi.Infrastructure.Data.Contexts;
 using CurrencyApi.Infrastructure.Data.Settings;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace CurrencyApi.Infrastructure.Extensions
@@ -33,7 +30,7 @@ namespace CurrencyApi.Infrastructure.Extensions
 #endif
 
                 //log application start
-                engine.Resolve<ILogger<EngineContext>>().LogInformation("Application started");
+                engine.Resolve<ILogger<EngineContext>>().LogInformation("Application started...");
             }
         }
     }

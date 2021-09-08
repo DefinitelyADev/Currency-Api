@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace CurrencyApi.Application.Interfaces
+namespace CurrencyApi.Application.Interfaces.Core
 {
     /// <summary>
     /// Represents object for the configuring services and middleware on application startup

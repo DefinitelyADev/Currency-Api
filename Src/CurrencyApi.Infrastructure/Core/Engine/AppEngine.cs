@@ -4,7 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using CurrencyApi.Application.Exceptions;
-using CurrencyApi.Application.Interfaces;
+using CurrencyApi.Application.Interfaces.Core;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -94,7 +94,7 @@ namespace CurrencyApi.Infrastructure.Core.Engine
 
             //get assembly from TypeFinder
             ITypeFinder? tf = Resolve<ITypeFinder>();
-            
+
             if (tf == null)
             {
                 return null;
@@ -162,7 +162,7 @@ namespace CurrencyApi.Infrastructure.Core.Engine
             }
 
             IEnumerable<Type> startupConfigurations = typeFinder.FindClassesOfType<IAppStartup>();
-            
+
             //create and sort instances of startup configurations
             IOrderedEnumerable<IAppStartup?> instances = startupConfigurations
                 .Select(startup => (IAppStartup?)Activator.CreateInstance(startup))
@@ -195,7 +195,7 @@ namespace CurrencyApi.Infrastructure.Core.Engine
             IServiceProvider? sp = GetServiceProvider();
             return sp?.GetService(type);
         }
-        
+
         /// <summary>
         /// Resolve required dependency
         /// </summary>
@@ -219,7 +219,7 @@ namespace CurrencyApi.Infrastructure.Core.Engine
 
             if (sp == null)
                 throw new InvalidOperationException("Cannot resolve service from a null service provider.");
-            
+
             return sp.GetRequiredService(type);
         }
 
@@ -246,7 +246,7 @@ namespace CurrencyApi.Infrastructure.Core.Engine
                     IEnumerable<object> parameters = constructor.GetParameters().Select(parameter =>
                     {
                         object? service = Resolve(parameter.ParameterType);
-                        
+
                         if (service == null)
                         {
                             throw new WebAppException("Unknown dependency");

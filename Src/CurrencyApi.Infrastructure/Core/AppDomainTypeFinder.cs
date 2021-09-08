@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using CurrencyApi.Application.Exceptions;
 using CurrencyApi.Application.Helpers;
-using CurrencyApi.Application.Interfaces;
+using CurrencyApi.Application.Interfaces.Core;
 
 namespace CurrencyApi.Infrastructure.Core
 {
@@ -133,7 +133,7 @@ namespace CurrencyApi.Infrastructure.Core
 
             if (_fileProvider == null)
                 return;
-            
+
             foreach (string dllPath in _fileProvider.GetFiles(directoryPath, "*.dll"))
             {
                 try
@@ -225,7 +225,7 @@ namespace CurrencyApi.Infrastructure.Core
                 foreach (Assembly a in assemblies)
                 {
                     Type[]? types = null;
-                    
+
                     try
                     {
                         types = a.GetTypes();
@@ -273,7 +273,7 @@ namespace CurrencyApi.Infrastructure.Core
             catch (ReflectionTypeLoadException ex)
             {
                 string msg = string.Empty;
-                foreach (WebAppException? e in ex.LoaderExceptions)
+                foreach (Exception? e in ex.LoaderExceptions)
                 {
                     msg += e?.Message + Environment.NewLine;
                 }

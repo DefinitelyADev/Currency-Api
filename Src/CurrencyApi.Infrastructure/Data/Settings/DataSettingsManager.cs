@@ -2,7 +2,7 @@
 using System.Text;
 using System.Text.Json;
 using CurrencyApi.Application.Helpers;
-using CurrencyApi.Application.Interfaces;
+using CurrencyApi.Application.Interfaces.Core;
 using CurrencyApi.Infrastructure.Core;
 
 namespace CurrencyApi.Infrastructure.Data.Settings

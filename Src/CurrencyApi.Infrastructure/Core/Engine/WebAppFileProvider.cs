@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using CurrencyApi.Application.Interfaces;
+using CurrencyApi.Application.Interfaces.Core;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 
@@ -94,7 +94,7 @@ namespace CurrencyApi.Infrastructure.Core.Engine
         {
             if (path == null)
                 throw new ArgumentNullException(nameof(path));
-            
+
             if (!DirectoryExists(path))
             {
                 Directory.CreateDirectory(path);

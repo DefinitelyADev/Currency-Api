@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace CurrencyApi.Application.Interfaces
+namespace CurrencyApi.Application.Interfaces.Core
 {
     /// <summary>
     /// Classes implementing this interface provide information about types

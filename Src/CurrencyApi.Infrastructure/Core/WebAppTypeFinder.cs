@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
-using CurrencyApi.Application.Interfaces;
+using CurrencyApi.Application.Interfaces.Core;
 
 namespace CurrencyApi.Infrastructure.Core
 {

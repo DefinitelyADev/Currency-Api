@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-using CurrencyApi.Application.Interfaces;
+using CurrencyApi.Application.Interfaces.Core;
 using CurrencyApi.Infrastructure.Core;
 using Microsoft.EntityFrameworkCore;
 

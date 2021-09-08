@@ -1,4 +1,4 @@
-﻿using CurrencyApi.Application.Interfaces;
+﻿using CurrencyApi.Application.Interfaces.Core;
 
 namespace CurrencyApi.Application.Helpers
 {

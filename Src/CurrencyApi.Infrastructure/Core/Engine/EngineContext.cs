@@ -1,5 +1,5 @@
 ﻿using System.Runtime.CompilerServices;
-using CurrencyApi.Application.Interfaces;
+using CurrencyApi.Application.Interfaces.Core;
 
 namespace CurrencyApi.Infrastructure.Core.Engine
 {
