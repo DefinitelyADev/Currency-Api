@@ -13,9 +13,8 @@ using Microsoft.Extensions.Logging;
 
 namespace CurrencyApi.Presentation.Controllers
 {
-    [ApiController]
     [Route("[controller]")]
-    public class CurrencyController : ControllerBase
+    public class CurrencyController : BaseApiController
     {
         private readonly ICurrencyService _currencyService;
 
@@ -49,7 +48,7 @@ namespace CurrencyApi.Presentation.Controllers
         {
             CreateCurrencyResult result = await _currencyService.CreateAsync(request);
 
-            if (result.Succeeded)
+            if (result.Data != null && result.Succeeded)
                 return CreatedAtAction(nameof(GetById), new {id = result.Data.Id}, result.Data);
 
             return BadRequest(new Response<CreateCurrencyRequest>("Could not create currency.").WithErrors(result.Errors).WithData(request));

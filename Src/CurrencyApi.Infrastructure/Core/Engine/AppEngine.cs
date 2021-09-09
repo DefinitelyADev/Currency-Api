@@ -17,12 +17,6 @@ namespace CurrencyApi.Infrastructure.Core.Engine
     /// </summary>
     public sealed class AppEngine : IEngine
     {
-        #region Fields
-
-        private ITypeFinder? _typeFinder;
-
-        #endregion
-
         #region Properties
 
         /// <summary>
@@ -114,12 +108,13 @@ namespace CurrencyApi.Infrastructure.Core.Engine
         /// <param name="services">Collection of service descriptors</param>
         /// <param name="configuration">Configuration of the application</param>
         /// <param name="typeFinder">Type finder of the current application</param>
-        public void ConfigureServices(IServiceCollection services, IConfiguration configuration, ITypeFinder typeFinder)
+        public void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
-            _typeFinder = typeFinder;
+            //find startup configurations provided by other assemblies
+            var typeFinder = new WebAppTypeFinder();
 
             //find startup configurations provided by other assemblies
-            IEnumerable<Type> startupConfigurations = _typeFinder.FindClassesOfType<IAppStartup>();
+            IEnumerable<Type> startupConfigurations = typeFinder.FindClassesOfType<IAppStartup>();
 
             //create and sort instances of startup configurations
             IOrderedEnumerable<IAppStartup?> instances = startupConfigurations
@@ -133,7 +128,7 @@ namespace CurrencyApi.Infrastructure.Core.Engine
             }
 
             //run startup tasks
-            RunStartupTasks(_typeFinder);
+            RunStartupTasks(typeFinder);
 
             //resolve assemblies here. otherwise, plugins can throw an exception when rendering views
             AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
@@ -142,7 +137,7 @@ namespace CurrencyApi.Infrastructure.Core.Engine
             services.AddSingleton<IEngine>(this);
 
             //register type finder
-            services.AddSingleton(_typeFinder);
+            services.AddSingleton(typeFinder);
         }
 
         /// <summary>

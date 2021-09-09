@@ -22,8 +22,7 @@ namespace CurrencyApi.Application.Interfaces.Core
         /// </summary>
         /// <param name="services">Collection of service descriptors</param>
         /// <param name="configuration">Configuration of the application</param>
-        /// <param name="typeFinder">Type finder of the current application</param>
-        void ConfigureServices(IServiceCollection services, IConfiguration configuration, ITypeFinder typeFinder);
+        void ConfigureServices(IServiceCollection services, IConfiguration configuration);
 
         /// <summary>
         /// Configure HTTP request pipeline
