@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using CurrencyApi.Application.Exceptions;
 using CurrencyApi.Application.Helpers;
 using CurrencyApi.Application.Interfaces.Data;
 using CurrencyApi.Application.Interfaces.Services;
@@ -9,22 +11,28 @@ using CurrencyApi.Application.Requests.User;
 using CurrencyApi.Application.Results;
 using CurrencyApi.Application.Results.UserResults;
 using CurrencyApi.Domain.Entities;
+using Microsoft.AspNetCore.Identity;
 
 namespace CurrencyApi.Infrastructure.Services
 {
     public class UserService : IUserService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly UserManager<User> _userManager;
 
-        public UserService(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
+        public UserService(IUnitOfWork unitOfWork, UserManager<User> userManager)
+        {
+            _unitOfWork = unitOfWork;
+            _userManager = userManager;
+        }
 
-        public PagedResult<User> Get(GetUserRequest request) => _unitOfWork.UserRepository.Find(GetExpressionFromRequest(request));
+        public PagedResult<User> Get(GetUserRequest request) => _unitOfWork.Users.Find(GetExpressionFromRequest(request));
 
-        public async Task<PagedResult<User>> GetAsync(GetUserRequest request) => await _unitOfWork.UserRepository.FindAsync(GetExpressionFromRequest(request));
+        public async Task<PagedResult<User>> GetAsync(GetUserRequest request) => await _unitOfWork.Users.FindAsync(GetExpressionFromRequest(request));
 
-        public User? GetById(string id) => _unitOfWork.UserRepository.GetById(id);
+        public User? GetById(string id) => _unitOfWork.Users.GetById(id);
 
-        public async Task<User?> GetByIdAsync(string id) => await _unitOfWork.UserRepository.GetByIdAsync(id);
+        public async Task<User?> GetByIdAsync(string id) => await _unitOfWork.Users.GetByIdAsync(id);
 
         public CreateUserResult Create(CreateUserRequest request)
         {
@@ -35,7 +43,7 @@ namespace CurrencyApi.Infrastructure.Services
 
             User newUser = new(request.Username);
 
-            User createdUser = _unitOfWork.UserRepository.Add(newUser);
+            User createdUser = _unitOfWork.Users.Add(newUser);
 
             _unitOfWork.Commit();
 
@@ -51,7 +59,7 @@ namespace CurrencyApi.Infrastructure.Services
 
             User newUser = new(request.Username);
 
-            User createdUser = await _unitOfWork.UserRepository.AddAsync(newUser);
+            User createdUser = await _unitOfWork.Users.AddAsync(newUser);
 
             await _unitOfWork.CommitAsync();
 
@@ -65,7 +73,7 @@ namespace CurrencyApi.Infrastructure.Services
             if (validationResult.HasErrors)
                 return new DeleteUserResult {Errors = validationResult.Errors!.ToList(), Succeeded = false};
 
-            bool result = _unitOfWork.UserRepository.Remove(id);
+            bool result = _unitOfWork.Users.Remove(id);
 
             _unitOfWork.Commit();
 
@@ -79,7 +87,7 @@ namespace CurrencyApi.Infrastructure.Services
             if (validationResult.HasErrors)
                 return new DeleteUserResult {Errors = validationResult.Errors!.ToList(), Succeeded = false};
 
-            bool result = await _unitOfWork.UserRepository.RemoveAsync(id);
+            bool result = await _unitOfWork.Users.RemoveAsync(id);
 
             await _unitOfWork.CommitAsync();
 
@@ -93,11 +101,17 @@ namespace CurrencyApi.Infrastructure.Services
             if (validationResult.HasErrors)
                 return new UpdatePasswordResult {Errors = validationResult.Errors!.ToList(), Succeeded = false};
 
-            bool result = _unitOfWork.UserRepository.UpdatePassword(username, request.Password, request.NewPassword);
+            User? user = _userManager.FindByNameAsync(username).Result;
 
-            _unitOfWork.Commit();
+            if (user == null)
+                return new UpdatePasswordResult {Errors = new List<string> {"User does not exist."}, Succeeded = false};
 
-            return new UpdatePasswordResult {Succeeded = result};
+            IdentityResult result = _userManager.ChangePasswordAsync(user, request.Password, request.NewPassword).Result;
+
+            if (!result.Succeeded)
+                throw new IdentityResultException(result.Errors);
+
+            return new UpdatePasswordResult {Succeeded = result.Succeeded, Errors = result.Errors.Select(error => error.Description).ToList()};
         }
 
         public async Task<UpdatePasswordResult> UpdatePasswordAsync(string username, ChangePasswordRequest request)
@@ -107,11 +121,17 @@ namespace CurrencyApi.Infrastructure.Services
             if (validationResult.HasErrors)
                 return new UpdatePasswordResult {Errors = validationResult.Errors!.ToList(), Succeeded = false};
 
-            bool result = await _unitOfWork.UserRepository.UpdatePasswordAsync(username, request.Password, request.NewPassword);
+            User? user = await _userManager.FindByNameAsync(username);
 
-            await _unitOfWork.CommitAsync();
+            if (user == null)
+                return new UpdatePasswordResult {Errors = new List<string> {"User does not exist."}, Succeeded = false};
 
-            return new UpdatePasswordResult {Succeeded = result};
+            IdentityResult result = await _userManager.ChangePasswordAsync(user, request.Password, request.NewPassword);
+
+            if (!result.Succeeded)
+                throw new IdentityResultException(result.Errors);
+
+            return new UpdatePasswordResult {Succeeded = result.Succeeded, Errors = result.Errors.Select(error => error.Description).ToList()};
         }
 
         private Expression<Func<User, bool>> GetExpressionFromRequest(GetUserRequest request)

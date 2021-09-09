@@ -5,8 +5,9 @@ namespace CurrencyApi.Application.Interfaces.Data
 {
     public interface IUnitOfWork
     {
-        IUserRepository UserRepository { get; }
-        ICurrencyRepository CurrencyRepository { get; }
+        ITokenRepository Tokens { get; }
+        IUserRepository Users { get; }
+        ICurrencyRepository Currencies { get; }
         int Commit();
         Task<int> CommitAsync();
     }

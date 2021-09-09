@@ -4,6 +4,14 @@ namespace CurrencyApi.Domain.Entities
 {
     public class RefreshToken
     {
+        public RefreshToken(string jwtId, string userId, DateTime dateStart, DateTime dateEnd)
+        {
+            JwtId = jwtId;
+            DateStart = dateStart;
+            DateEnd = dateEnd;
+            UserId = userId;
+        }
+
         public RefreshToken(string token, string jwtId, DateTime dateStart, DateTime dateEnd, bool used, bool invalidated, string userId)
         {
             Token = token;

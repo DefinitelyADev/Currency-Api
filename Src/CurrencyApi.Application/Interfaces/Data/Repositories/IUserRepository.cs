@@ -8,7 +8,5 @@ namespace CurrencyApi.Application.Interfaces.Data.Repositories
     {
         User GetByUsername(string username);
         Task<User> GetByUsernameAsync(string username);
-        bool UpdatePassword(string username, string password, string newPassword);
-        Task<bool> UpdatePasswordAsync(string username, string password, string newPassword);
     }
 }

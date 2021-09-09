@@ -18,13 +18,13 @@ namespace CurrencyApi.Infrastructure.Services
 
         public CurrencyService(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
 
-        public PagedResult<Currency> Get(GetCurrencyRequest request) => _unitOfWork.CurrencyRepository.Find(GetExpressionFromRequest(request));
+        public PagedResult<Currency> Get(GetCurrencyRequest request) => _unitOfWork.Currencies.Find(GetExpressionFromRequest(request));
 
-        public async Task<PagedResult<Currency>> GetAsync(GetCurrencyRequest request) => await _unitOfWork.CurrencyRepository.FindAsync(GetExpressionFromRequest(request));
+        public async Task<PagedResult<Currency>> GetAsync(GetCurrencyRequest request) => await _unitOfWork.Currencies.FindAsync(GetExpressionFromRequest(request));
 
-        public Currency? GetById(int id) => _unitOfWork.CurrencyRepository.GetById(id);
+        public Currency? GetById(int id) => _unitOfWork.Currencies.GetById(id);
 
-        public async Task<Currency?> GetByIdAsync(int id) => await _unitOfWork.CurrencyRepository.GetByIdAsync(id);
+        public async Task<Currency?> GetByIdAsync(int id) => await _unitOfWork.Currencies.GetByIdAsync(id);
 
         public CreateCurrencyResult Create(CreateCurrencyRequest request)
         {
@@ -35,7 +35,7 @@ namespace CurrencyApi.Infrastructure.Services
 
             Currency newCurrency = new(request.Name, request.AlphabeticCode, request.NumericCode, request.DecimalDigits);
 
-            Currency createdCurrency = _unitOfWork.CurrencyRepository.Add(newCurrency);
+            Currency createdCurrency = _unitOfWork.Currencies.Add(newCurrency);
 
             _unitOfWork.Commit();
 
@@ -51,7 +51,7 @@ namespace CurrencyApi.Infrastructure.Services
 
             Currency newCurrency = new(request.Name, request.AlphabeticCode, request.NumericCode, request.DecimalDigits);
 
-            Currency createdCurrency = await _unitOfWork.CurrencyRepository.AddAsync(newCurrency);
+            Currency createdCurrency = await _unitOfWork.Currencies.AddAsync(newCurrency);
 
             await _unitOfWork.CommitAsync();
 
@@ -67,7 +67,7 @@ namespace CurrencyApi.Infrastructure.Services
 
             Currency currencyToUpdate = new(request.Id, request.Name, request.AlphabeticCode, request.NumericCode, request.DecimalDigits);
 
-            Currency createdCurrency = _unitOfWork.CurrencyRepository.Update(currencyToUpdate);
+            Currency createdCurrency = _unitOfWork.Currencies.Update(currencyToUpdate);
 
             _unitOfWork.Commit();
 
@@ -83,7 +83,7 @@ namespace CurrencyApi.Infrastructure.Services
 
             Currency currencyToUpdate = new(request.Id, request.Name, request.AlphabeticCode, request.NumericCode, request.DecimalDigits);
 
-            Currency createdCurrency = await _unitOfWork.CurrencyRepository.UpdateAsync(currencyToUpdate);
+            Currency createdCurrency = await _unitOfWork.Currencies.UpdateAsync(currencyToUpdate);
 
             await _unitOfWork.CommitAsync();
 
@@ -97,7 +97,7 @@ namespace CurrencyApi.Infrastructure.Services
             if (validationResult.HasErrors)
                 return new DeleteCurrencyResult {Errors = validationResult.Errors!.ToList(), Succeeded = false};
 
-            bool result = _unitOfWork.CurrencyRepository.Remove(id);
+            bool result = _unitOfWork.Currencies.Remove(id);
 
             _unitOfWork.Commit();
 
@@ -111,7 +111,7 @@ namespace CurrencyApi.Infrastructure.Services
             if (validationResult.HasErrors)
                 return new DeleteCurrencyResult {Errors = validationResult.Errors!.ToList(), Succeeded = false};
 
-            bool result = await _unitOfWork.CurrencyRepository.RemoveAsync(id);
+            bool result = await _unitOfWork.Currencies.RemoveAsync(id);
 
             await _unitOfWork.CommitAsync();
 

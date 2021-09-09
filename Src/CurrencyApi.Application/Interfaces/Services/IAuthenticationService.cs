@@ -6,9 +6,6 @@ namespace CurrencyApi.Application.Interfaces.Services
 {
     public interface IAuthenticationService
     {
-        AuthenticationResult Register(RegisterRequest request);
-        Task<AuthenticationResult> RegisterAsync(RegisterRequest request);
-
         AuthenticationResult Login(LoginRequest request);
         Task<AuthenticationResult> LoginAsync(LoginRequest request);
 
