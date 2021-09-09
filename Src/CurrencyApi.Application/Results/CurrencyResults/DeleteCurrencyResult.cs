@@ -1,4 +1,4 @@
-﻿namespace CurrencyApi.Application.Results
+﻿namespace CurrencyApi.Application.Results.CurrencyResults
 {
     public class DeleteCurrencyResult : ResultBase
     {

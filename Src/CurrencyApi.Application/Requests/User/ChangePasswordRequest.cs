@@ -6,19 +6,13 @@
         {
             Password = password;
             NewPassword = newPassword;
-            VerifyPassword = verifyPassword;
+            ConfirmPassword = verifyPassword;
         }
 
-        // [Required]
         public string Password { get; set; }
 
-        // [Required]
-        // [Display(Name = "New Password")]
         public string NewPassword { get; set; }
 
-        // [Required]
-        // [Compare(nameof(NewPassword))]
-        // [Display(Name = "Verify Password")]
-        public string VerifyPassword { get; set; }
+        public string ConfirmPassword { get; set; }
     }
 }

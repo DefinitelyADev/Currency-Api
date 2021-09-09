@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using CurrencyApi.Application.Results;
 
-namespace CurrencyApi.Application.Interfaces.Data.Core
+namespace CurrencyApi.Application.Interfaces.Data
 {
     public interface IRepository<in TKey, TEntity> where TEntity : class
     {

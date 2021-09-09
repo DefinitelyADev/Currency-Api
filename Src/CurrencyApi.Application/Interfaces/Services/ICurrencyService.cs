@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using CurrencyApi.Application.Requests.Currency;
 using CurrencyApi.Application.Results;
+using CurrencyApi.Application.Results.CurrencyResults;
 using CurrencyApi.Domain.Entities;
 
 namespace CurrencyApi.Application.Interfaces.Services

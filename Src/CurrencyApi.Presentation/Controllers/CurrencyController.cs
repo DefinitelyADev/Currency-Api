@@ -6,6 +6,7 @@ using CurrencyApi.Application.Interfaces.Services;
 using CurrencyApi.Application.Requests.Currency;
 using CurrencyApi.Application.Responses;
 using CurrencyApi.Application.Results;
+using CurrencyApi.Application.Results.CurrencyResults;
 using CurrencyApi.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;

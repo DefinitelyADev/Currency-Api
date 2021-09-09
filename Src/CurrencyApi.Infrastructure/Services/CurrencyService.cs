@@ -7,6 +7,7 @@ using CurrencyApi.Application.Interfaces.Data;
 using CurrencyApi.Application.Interfaces.Services;
 using CurrencyApi.Application.Requests.Currency;
 using CurrencyApi.Application.Results;
+using CurrencyApi.Application.Results.CurrencyResults;
 using CurrencyApi.Domain.Entities;
 
 namespace CurrencyApi.Infrastructure.Services
@@ -27,7 +28,7 @@ namespace CurrencyApi.Infrastructure.Services
 
         public CreateCurrencyResult Create(CreateCurrencyRequest request)
         {
-            ValidationResult validationResult = ValidateCreationRequest(request);
+            ValidationResult validationResult = ValidateRequest(request);
 
             if (validationResult.HasErrors)
                 return new CreateCurrencyResult {Errors = validationResult.Errors!.ToList(), Succeeded = false};
@@ -36,12 +37,14 @@ namespace CurrencyApi.Infrastructure.Services
 
             Currency createdCurrency = _unitOfWork.CurrencyRepository.Add(newCurrency);
 
+            _unitOfWork.Commit();
+
             return new CreateCurrencyResult {Data = createdCurrency};
         }
 
         public async Task<CreateCurrencyResult> CreateAsync(CreateCurrencyRequest request)
         {
-            ValidationResult validationResult = ValidateCreationRequest(request);
+            ValidationResult validationResult = ValidateRequest(request);
 
             if (validationResult.HasErrors)
                 return new CreateCurrencyResult {Errors = validationResult.Errors!.ToList(), Succeeded = false};
@@ -50,27 +53,69 @@ namespace CurrencyApi.Infrastructure.Services
 
             Currency createdCurrency = await _unitOfWork.CurrencyRepository.AddAsync(newCurrency);
 
+            await _unitOfWork.CommitAsync();
+
             return new CreateCurrencyResult {Data = createdCurrency};
         }
 
         public UpdateCurrencyResult Update(UpdateCurrencyRequest request)
         {
-            throw new System.NotImplementedException();
+            ValidationResult validationResult = ValidateRequest(request);
+
+            if (validationResult.HasErrors)
+                return new UpdateCurrencyResult {Errors = validationResult.Errors!.ToList(), Succeeded = false};
+
+            Currency currencyToUpdate = new(request.Id, request.Name, request.AlphabeticCode, request.NumericCode, request.DecimalDigits);
+
+            Currency createdCurrency = _unitOfWork.CurrencyRepository.Update(currencyToUpdate);
+
+            _unitOfWork.Commit();
+
+            return new UpdateCurrencyResult {Data = createdCurrency};
         }
 
         public async Task<UpdateCurrencyResult> UpdateAsync(UpdateCurrencyRequest request)
         {
-            throw new System.NotImplementedException();
+            ValidationResult validationResult = ValidateRequest(request);
+
+            if (validationResult.HasErrors)
+                return new UpdateCurrencyResult {Errors = validationResult.Errors!.ToList(), Succeeded = false};
+
+            Currency currencyToUpdate = new(request.Id, request.Name, request.AlphabeticCode, request.NumericCode, request.DecimalDigits);
+
+            Currency createdCurrency = await _unitOfWork.CurrencyRepository.UpdateAsync(currencyToUpdate);
+
+            await _unitOfWork.CommitAsync();
+
+            return new UpdateCurrencyResult {Data = createdCurrency};
         }
 
         public DeleteCurrencyResult Delete(int id)
         {
-            throw new System.NotImplementedException();
+            ValidationResult validationResult = ValidateDeleteRequest(id);
+
+            if (validationResult.HasErrors)
+                return new DeleteCurrencyResult {Errors = validationResult.Errors!.ToList(), Succeeded = false};
+
+            bool result = _unitOfWork.CurrencyRepository.Remove(id);
+
+            _unitOfWork.Commit();
+
+            return new DeleteCurrencyResult {Succeeded = result};
         }
 
         public async Task<DeleteCurrencyResult> DeleteAsync(int id)
         {
-            throw new System.NotImplementedException();
+            ValidationResult validationResult = ValidateDeleteRequest(id);
+
+            if (validationResult.HasErrors)
+                return new DeleteCurrencyResult {Errors = validationResult.Errors!.ToList(), Succeeded = false};
+
+            bool result = await _unitOfWork.CurrencyRepository.RemoveAsync(id);
+
+            await _unitOfWork.CommitAsync();
+
+            return new DeleteCurrencyResult {Succeeded = result};
         }
 
         #region Helpers
@@ -84,7 +129,7 @@ namespace CurrencyApi.Infrastructure.Services
             return expression;
         }
 
-        private ValidationResult ValidateCreationRequest(CreateCurrencyRequest request)
+        private ValidationResult ValidateRequest(CreateCurrencyRequest request)
         {
             ValidationResult result = new();
 
@@ -99,6 +144,35 @@ namespace CurrencyApi.Infrastructure.Services
 
             if (request.NumericCode < 0)
                 result.AddError("Numeric code cannot be less than 0.");
+
+            return result;
+        }
+
+        private ValidationResult ValidateRequest(UpdateCurrencyRequest request)
+        {
+            ValidationResult result = new();
+
+            if (string.IsNullOrWhiteSpace(request.Name))
+                result.AddError("Name cannot be empty.");
+
+            if (string.IsNullOrWhiteSpace(request.AlphabeticCode))
+                result.AddError("Alphabetic code cannot be empty.");
+
+            if (request.DecimalDigits < 0)
+                result.AddError("Decimal digits cannot be less than 0.");
+
+            if (request.NumericCode < 0)
+                result.AddError("Numeric code cannot be less than 0.");
+
+            return result;
+        }
+
+        private ValidationResult ValidateDeleteRequest(int id)
+        {
+            ValidationResult result = new();
+
+            if (id < 0)
+                result.AddError("Decimal digits cannot be less than 0.");
 
             return result;
         }
