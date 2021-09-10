@@ -12,10 +12,8 @@ namespace CurrencyApi.Infrastructure
 
         public void Configure(IApplicationBuilder application)
         {
-            application.UseForwardedHeaders(new ForwardedHeadersOptions
-            {
-                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-            });
+            var options = new ForwardedHeadersOptions {ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto};
+            application.UseForwardedHeaders(options);
         }
 
         public int Order => -1; // Forwarded headers by HTTP proxy should be applied before calling other middleware.

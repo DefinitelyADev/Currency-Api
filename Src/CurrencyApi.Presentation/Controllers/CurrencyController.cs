@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using CurrencyApi.Application.Extensions;
 using CurrencyApi.Application.Interfaces.Services;
@@ -9,7 +7,6 @@ using CurrencyApi.Application.Results;
 using CurrencyApi.Application.Results.CurrencyResults;
 using CurrencyApi.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
 namespace CurrencyApi.Presentation.Controllers
 {

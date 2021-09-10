@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 
 namespace CurrencyApi.Infrastructure.Data.Settings
 {
@@ -12,28 +11,24 @@ namespace CurrencyApi.Infrastructure.Data.Settings
         /// Unknown
         /// </summary>
         [EnumMember(Value = "")]
-        [Display(Name = "Please select")]
         Unknown,
 
         /// <summary>
         /// MySQL
         /// </summary>
         [EnumMember(Value = "mysql")]
-        [Display(Name = "MySql")]
         MySql,
 
         /// <summary>
         /// PostgreSQL
         /// </summary>
         [EnumMember(Value = "postgres")]
-        [Display(Name = "PostgreSQL")]
         Postgres,
 
         /// <summary>
         /// MS SQL Server
         /// </summary>
         [EnumMember(Value = "sqlserver")]
-        [Display(Name = "Microsoft SQL Server")]
         SqlServer
     }
 }

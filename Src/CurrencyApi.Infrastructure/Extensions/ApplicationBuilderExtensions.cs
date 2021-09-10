@@ -27,8 +27,8 @@ namespace CurrencyApi.Infrastructure.Extensions
 #endif
 
                 //log application start
-                engine.Resolve<ILogger<EngineContext>>().LogInformation("Application started...");
             }
+                engine.Resolve<ILogger<EngineContext>>().LogInformation("Application started...");
         }
     }
 }

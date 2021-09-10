@@ -3,7 +3,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using CurrencyApi.Application.Results;
 
-namespace CurrencyApi.Application.Interfaces.Data
+namespace CurrencyApi.Application.Interfaces.Data.Repositories
 {
     public interface IRepository<in TKey, TEntity> where TEntity : class
     {

@@ -30,7 +30,7 @@ namespace CurrencyApi.Infrastructure.Services
 
         public async Task<PagedResult<User>> GetAsync(GetUserRequest request) => await _unitOfWork.Users.FindAsync(GetExpressionFromRequest(request));
 
-        public User? GetById(string id) => _unitOfWork.Users.GetById(id);
+        public User GetById(string id) => _unitOfWork.Users.GetById(id);
 
         public async Task<User?> GetByIdAsync(string id) => await _unitOfWork.Users.GetByIdAsync(id);
 

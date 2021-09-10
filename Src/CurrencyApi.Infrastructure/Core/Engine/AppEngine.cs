@@ -107,7 +107,6 @@ namespace CurrencyApi.Infrastructure.Core.Engine
         /// </summary>
         /// <param name="services">Collection of service descriptors</param>
         /// <param name="configuration">Configuration of the application</param>
-        /// <param name="typeFinder">Type finder of the current application</param>
         public void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
             //find startup configurations provided by other assemblies
@@ -117,12 +116,12 @@ namespace CurrencyApi.Infrastructure.Core.Engine
             IEnumerable<Type> startupConfigurations = typeFinder.FindClassesOfType<IAppStartup>();
 
             //create and sort instances of startup configurations
-            IOrderedEnumerable<IAppStartup?> instances = startupConfigurations
+            IOrderedEnumerable<IAppStartup?> startupInstances = startupConfigurations
                 .Select(startup => (IAppStartup?)Activator.CreateInstance(startup))
                 .OrderBy(startup => startup?.Order);
 
             //configure services
-            foreach (IAppStartup? instance in instances)
+            foreach (IAppStartup? instance in startupInstances)
             {
                 instance?.ConfigureServices(services, configuration);
             }
@@ -138,6 +137,20 @@ namespace CurrencyApi.Infrastructure.Core.Engine
 
             //register type finder
             services.AddSingleton(typeFinder);
+
+            //find dependency registrars provided by other assemblies
+            IEnumerable<Type> dependencyRegistrars = typeFinder.FindClassesOfType<IDependencyRegistrar>();
+
+            //create and sort instances of dependency registrars
+            IOrderedEnumerable<IDependencyRegistrar?> dependencyRegistrarInstances = dependencyRegistrars
+                .Select(dependencyRegistrar => (IDependencyRegistrar?)Activator.CreateInstance(dependencyRegistrar))
+                .OrderBy(dependencyRegistrar => dependencyRegistrar?.Order);
+
+            //register all provided dependencies
+            foreach (IDependencyRegistrar? dependencyRegistrar in dependencyRegistrarInstances)
+                dependencyRegistrar?.Register(services, typeFinder);
+
+            services.AddSingleton(services);
         }
 
         /// <summary>
@@ -149,12 +162,7 @@ namespace CurrencyApi.Infrastructure.Core.Engine
             _serviceProvider = application.ApplicationServices;
 
             //find startup configurations provided by other assemblies
-            ITypeFinder? typeFinder = Resolve<ITypeFinder>();
-
-            if (typeFinder == null)
-            {
-                return;
-            }
+            ITypeFinder typeFinder = new WebAppTypeFinder();
 
             IEnumerable<Type> startupConfigurations = typeFinder.FindClassesOfType<IAppStartup>();
 
@@ -165,9 +173,7 @@ namespace CurrencyApi.Infrastructure.Core.Engine
 
             //configure request pipeline
             foreach (IAppStartup? instance in instances)
-            {
                 instance?.Configure(application);
-            }
         }
 
         /// <summary>

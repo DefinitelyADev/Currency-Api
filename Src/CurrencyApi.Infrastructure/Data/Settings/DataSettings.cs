@@ -31,6 +31,11 @@ namespace CurrencyApi.Infrastructure.Data.Settings
         public DataProviders DataProvider { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether to enable sensitive data logging
+        /// </summary>
+        public bool EnableSensitiveDataLogging { get; set; }
+
+        /// <summary>
         /// Gets or sets a raw settings
         /// </summary>
         public IDictionary<string, string> RawDataSettings { get; }
@@ -38,7 +43,7 @@ namespace CurrencyApi.Infrastructure.Data.Settings
         /// <summary>
         /// Gets or sets a value indicating whether the information is entered
         /// </summary>
-        /// <returns></returns>
+        /// <returns>False if the provider is unknown or the connection string is empty</returns>
         [JsonIgnore]
         public bool IsValid => DataProvider != DataProviders.Unknown && !string.IsNullOrEmpty(ConnectionString);
 

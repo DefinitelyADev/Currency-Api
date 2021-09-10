@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using CurrencyApi.Domain.Entities;
+﻿using CurrencyApi.Domain.Entities;
 using CurrencyApi.Infrastructure.Extensions;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-// using Microsoft.AspNetCore.Identity;
 
 namespace CurrencyApi.Infrastructure.Data.Contexts
 {
@@ -15,26 +11,23 @@ namespace CurrencyApi.Infrastructure.Data.Contexts
     /// </summary>
     public class ApplicationDbContext : IdentityDbContext<User>
     {
-        private readonly string _defaultSchemaName;
-
         /// <summary>
         /// Creates an instance of the application dbContext.
         /// </summary>
-        /// <param name="defaultSchemaName">The schema for this context.</param>
         /// <param name="options">The options for this context.</param>
-        public ApplicationDbContext(string defaultSchemaName, DbContextOptions<ApplicationDbContext> options) : base(options) => _defaultSchemaName = defaultSchemaName;
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            List<Currency> res = this.Currencies.Where(p => true).ToListAsync().Result;
-            modelBuilder.HasDefaultSchema(_defaultSchemaName);
+
+            // modelBuilder.HasDefaultSchema(_defaultSchemaName);
 
             modelBuilder.ApplyModelBuilderConfigurations();
         }
 
-        private DbSet<Currency> Currencies { get; set; }
-        private DbSet<RefreshToken> RefreshTokens { get; set; }
+        public DbSet<Currency> Currencies { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
     }
 #nullable restore
 }

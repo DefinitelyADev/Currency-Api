@@ -22,7 +22,7 @@ namespace CurrencyApi.Infrastructure.Services
 
         public async Task<PagedResult<Currency>> GetAsync(GetCurrencyRequest request) => await _unitOfWork.Currencies.FindAsync(GetExpressionFromRequest(request));
 
-        public Currency? GetById(int id) => _unitOfWork.Currencies.GetById(id);
+        public Currency GetById(int id) => _unitOfWork.Currencies.GetById(id);
 
         public async Task<Currency?> GetByIdAsync(int id) => await _unitOfWork.Currencies.GetByIdAsync(id);
 
