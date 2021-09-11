@@ -49,35 +49,21 @@ namespace CurrencyApi.Infrastructure.Extensions
         /// Add entity framework core to the service provider
         /// </summary>
         /// <param name="services">Collection of service descriptors</param>
-        public static void AddEntityFrameworkCore(this IServiceCollection services)
-        {
-            services.AddDbContext<ApplicationDbContext>(Configure);
-        }
+        /// <param name="settings">Data settings</param>
+        public static void AddEntityFrameworkCore(this IServiceCollection services, DataSettings settings)
+            => services.AddDbContext<ApplicationDbContext>(options => Configure(options, settings));
 
         public static void AddEntityFrameworkCoreIdentity(this IServiceCollection services) => services
             .AddIdentity<User, IdentityRole>(Configure)
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
 
-        private static void Configure(IdentityOptions options)
+        private static void Configure(DbContextOptionsBuilder options, DataSettings settings)
         {
-            options.Password.RequireDigit = true;
-            options.Password.RequireNonAlphanumeric = true;
-            options.Password.RequireUppercase = true;
-            options.Password.RequireLowercase = true;
-            options.Password.RequiredLength = 8;
-        }
-
-        private static void Configure(DbContextOptionsBuilder options)
-        {
-            DataSettings? settings = DataSettingsManager.LoadSettings();
-
-            if (settings == null)
-                return;
-
             if (settings.EnableSensitiveDataLogging)
                 options.EnableSensitiveDataLogging();
 
+            // ReSharper disable once SwitchExpressionHandlesSomeKnownEnumValuesWithExceptionInDefault
             _ = settings.DataProvider switch
             {
                 DataProviders.SqlServer => ConfigureSqlServer(options, settings.ConnectionString),
@@ -110,6 +96,15 @@ namespace CurrencyApi.Infrastructure.Extensions
                 // b.MigrationsAssembly("ArtemisPlatform.Presentation.Server");
             });
             return options;
+        }
+
+        private static void Configure(IdentityOptions options)
+        {
+            options.Password.RequireDigit = true;
+            options.Password.RequireNonAlphanumeric = true;
+            options.Password.RequireUppercase = true;
+            options.Password.RequireLowercase = true;
+            options.Password.RequiredLength = 8;
         }
     }
 }
