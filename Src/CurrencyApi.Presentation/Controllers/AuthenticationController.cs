@@ -1,17 +1,19 @@
 ﻿using System.Threading.Tasks;
+using CurrencyApi.Application.Interfaces.Services;
 using CurrencyApi.Application.Requests.Authentication;
 using CurrencyApi.Application.Results.AuthenticationResults;
 using CurrencyApi.Infrastructure.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CurrencyApi.Presentation.Controllers
 {
-    [Route("[controller]")]
+    [Route("[controller]"), AllowAnonymous]
     public class AuthenticationController : BaseApiController
     {
-        private readonly AuthenticationService _authenticationService;
+        private readonly IAuthenticationService _authenticationService;
 
-        public AuthenticationController(AuthenticationService authenticationService)
+        public AuthenticationController(IAuthenticationService authenticationService)
         {
             _authenticationService = authenticationService;
         }

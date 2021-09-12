@@ -28,7 +28,7 @@ namespace CurrencyApi.Infrastructure.Services
 
         public async Task<PagedResult<User>> GetAsync(GetUserRequest request) => await _unitOfWork.Users.FindAsync(request, GetExpressionFromRequest(request));
 
-        public async Task<User?> GetByIdAsync(string id) => await _unitOfWork.Users.GetByIdAsync(id);
+        public async Task<User> GetByIdAsync(string id) => await _unitOfWork.Users.GetByIdAsync(id);
 
         public async Task<CreateUserResult> CreateAsync(CreateUserRequest request)
         {
@@ -43,7 +43,7 @@ namespace CurrencyApi.Infrastructure.Services
 
             await _unitOfWork.CommitAsync();
 
-            return new CreateUserResult {Data = createdUser};
+            return new CreateUserResult {Data = createdUser, Succeeded = true};
         }
 
         public async Task<DeleteUserResult> DeleteAsync(string id)

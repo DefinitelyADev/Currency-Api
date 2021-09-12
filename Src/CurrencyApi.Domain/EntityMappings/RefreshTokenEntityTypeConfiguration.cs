@@ -9,7 +9,10 @@ namespace CurrencyApi.Domain.EntityMappings
         public void Configure(EntityTypeBuilder<RefreshToken> builder)
         {
             builder.HasKey(p => p.Token);
-            builder.Property(p => p.Token).ValueGeneratedOnAdd();
+            builder.Property(p => p.Token).HasMaxLength(36).ValueGeneratedOnAdd();
+
+            builder.Property(p => p.JwtId).HasMaxLength(36);
+            builder.Property(p => p.UserId).HasMaxLength(36);
         }
     }
 }

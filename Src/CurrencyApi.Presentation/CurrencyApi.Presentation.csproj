@@ -7,6 +7,15 @@
 
     <ItemGroup>
       <ProjectReference Include="..\CurrencyApi.Infrastructure\CurrencyApi.Infrastructure.csproj" />
+      <ProjectReference Include="..\CurrencyApi.Migrations\CurrencyApi.Migrations.MySql\CurrencyApi.Migrations.MySql.csproj" />
+      <ProjectReference Include="..\CurrencyApi.Migrations\CurrencyApi.Migrations.PostgreSql\CurrencyApi.Migrations.PostgreSql.csproj" />
+      <ProjectReference Include="..\CurrencyApi.Migrations\CurrencyApi.Migrations.SqlServer\CurrencyApi.Migrations.SqlServer.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.9">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+    </ItemGroup>
 </Project>

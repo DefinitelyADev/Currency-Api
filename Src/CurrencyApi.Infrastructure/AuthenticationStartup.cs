@@ -15,9 +15,9 @@ namespace CurrencyApi.Infrastructure
         public void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
             //JWT settings
-            JwtConfiguration jwtConfiguration = new();
-            configuration.Bind(nameof(JwtConfiguration), jwtConfiguration);
-            services.AddSingleton(jwtConfiguration);
+            JwtSettings jwtSettings = new();
+            configuration.Bind(nameof(JwtSettings), jwtSettings);
+            services.AddSingleton(jwtSettings);
 
             //Add JWT validation parameters
             var tokenValidationParameters = new TokenValidationParameters
@@ -26,9 +26,9 @@ namespace CurrencyApi.Infrastructure
                 ValidateAudience = true,
                 ValidateLifetime = true,
                 ValidateIssuerSigningKey = true,
-                ValidIssuer = jwtConfiguration.Issuer,
-                ValidAudience = jwtConfiguration.Issuer,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtConfiguration.Secret ?? "SuperSecret")),
+                ValidIssuer = jwtSettings.Issuer,
+                ValidAudience = jwtSettings.Issuer,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Secret ?? "SuperSecret")),
                 ClockSkew = TimeSpan.Zero
             };
 

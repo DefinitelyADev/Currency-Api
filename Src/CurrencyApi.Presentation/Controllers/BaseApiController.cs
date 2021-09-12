@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CurrencyApi.Presentation.Controllers
 {
-    [ApiController]
+    [ApiController, Authorize(Roles = "admin")]
     public class BaseApiController : ControllerBase
     {
 

@@ -11,7 +11,7 @@ namespace CurrencyApi.Application.Interfaces.Services
         Task<PagedResult<Currency>> GetAsync(GetCurrencyRequest request);
         Task<Currency> GetByIdAsync(int id);
         Task<CreateCurrencyResult> CreateAsync(CreateCurrencyRequest request);
-        Task<UpdateCurrencyResult> UpdateAsync(UpdateCurrencyRequest request);
+        Task<UpdateCurrencyResult> UpdateAsync(int id, UpdateCurrencyRequest request);
         Task<DeleteCurrencyResult> DeleteAsync(int id);
     }
 }

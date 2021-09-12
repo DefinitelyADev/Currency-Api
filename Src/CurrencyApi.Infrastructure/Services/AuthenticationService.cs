@@ -22,9 +22,9 @@ namespace CurrencyApi.Infrastructure.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly UserManager<User> _userManager;
         private readonly TokenValidationParameters _tokenValidationParameters;
-        private readonly JwtConfiguration _jwtSettings;
+        private readonly JwtSettings _jwtSettings;
 
-        public AuthenticationService(IUnitOfWork unitOfWork, UserManager<User> userManager, TokenValidationParameters tokenValidationParameters, JwtConfiguration jwtSettings)
+        public AuthenticationService(IUnitOfWork unitOfWork, UserManager<User> userManager, TokenValidationParameters tokenValidationParameters, JwtSettings jwtSettings)
         {
             _unitOfWork = unitOfWork;
             _userManager = userManager;
@@ -40,6 +40,7 @@ namespace CurrencyApi.Infrastructure.Services
             {
                 return new AuthenticationResult()
                 {
+                    Succeeded = false,
                     Errors = new List<string>() { "Username or password is incorrect." } // Prevent from checking if a user exists by returning the same message
                 };
             }
@@ -50,6 +51,7 @@ namespace CurrencyApi.Infrastructure.Services
             {
                 return new AuthenticationResult
                 {
+                    Succeeded = false,
                     Errors = new List<string> {"Username or password is incorrect."}
                 };
             }
@@ -67,6 +69,7 @@ namespace CurrencyApi.Infrastructure.Services
             {
                 return new AuthenticationResult()
                 {
+                    Succeeded = false,
                     Errors = new List<string> { "Invalid access token" }
                 };
             }
@@ -79,6 +82,7 @@ namespace CurrencyApi.Infrastructure.Services
             {
                 return new AuthenticationResult
                 {
+                    Succeeded = false,
                     Errors = new List<string> { "The access token hasn't expired yet" }
                 };
             }
@@ -90,6 +94,7 @@ namespace CurrencyApi.Infrastructure.Services
             if (DateTime.UtcNow > storedRefreshToken.DateEnd) {
                 return new AuthenticationResult
                 {
+                    Succeeded = false,
                     Errors = new List<string> { "This refresh token has expired" }
                 };
             }
@@ -99,6 +104,7 @@ namespace CurrencyApi.Infrastructure.Services
             {
                 return new AuthenticationResult
                 {
+                    Succeeded = false,
                     Errors = new List<string> { "This refresh token has been invalidated" }
                 };
             }
@@ -108,6 +114,7 @@ namespace CurrencyApi.Infrastructure.Services
             {
                 return new AuthenticationResult
                 {
+                    Succeeded = false,
                     Errors = new List<string> { "This refresh token has already been used" }
                 };
             }
@@ -118,6 +125,7 @@ namespace CurrencyApi.Infrastructure.Services
             {
                 return new AuthenticationResult
                 {
+                    Succeeded = false,
                     Errors = new List<string> { "This refresh token does not match this JWT" }
                 };
             }
@@ -165,7 +173,7 @@ namespace CurrencyApi.Infrastructure.Services
                 _jwtSettings.Issuer,
                 claims,
                 DateTime.UtcNow,
-                DateTime.UtcNow.AddSeconds(_jwtSettings.AccessTokenExpiration),
+                DateTime.UtcNow.AddMinutes(_jwtSettings.AccessTokenExpiration),
                 credentials
             );
 

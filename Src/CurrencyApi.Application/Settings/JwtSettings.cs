@@ -1,6 +1,6 @@
 ﻿namespace CurrencyApi.Application.Settings
 {
-    public class JwtConfiguration
+    public class JwtSettings
     {
         public string? Secret { get; set; }
         public string? Issuer { get; set; }

@@ -40,23 +40,23 @@ namespace CurrencyApi.Infrastructure.Services
 
             await _unitOfWork.CommitAsync();
 
-            return new CreateCurrencyRateResult {Data = createdCurrencyRate};
+            return new CreateCurrencyRateResult {Data = createdCurrencyRate, Succeeded = true};
         }
 
-        public async Task<UpdateCurrencyRateResult> UpdateAsync(UpdateCurrencyRateRequest request)
+        public async Task<UpdateCurrencyRateResult> UpdateAsync(int id, UpdateCurrencyRateRequest request)
         {
-            CurrencyRate currencyRateToUpdate = new() {Rate = request.Rate, OriginCurrencyId = request.CurrencyId, TargetCurrencyId = request.TargetCurrencyId};
+            CurrencyRate currencyRateToUpdate = new() {Id = id, Rate = request.Rate, OriginCurrencyId = request.OriginCurrencyId, TargetCurrencyId = request.TargetCurrencyId};
 
             CurrencyRate createdCurrencyRate = await _unitOfWork.CurrencyRates.UpdateAsync(currencyRateToUpdate);
 
             await _unitOfWork.CommitAsync();
 
-            return new UpdateCurrencyRateResult {Data = createdCurrencyRate};
+            return new UpdateCurrencyRateResult {Data = createdCurrencyRate, Succeeded = true};
         }
 
         public async Task<DeleteCurrencyRateResult> DeleteAsync(int id)
         {
-            bool result = await _unitOfWork.Currencies.RemoveAsync(id);
+            bool result = await _unitOfWork.CurrencyRates.RemoveAsync(id);
 
             await _unitOfWork.CommitAsync();
 

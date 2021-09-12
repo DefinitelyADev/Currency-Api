@@ -2,8 +2,7 @@
 {
     public class UpdateCurrencyRateRequest
     {
-        public int Id { get; set; }
-        public int CurrencyId {get; set;}
+        public int OriginCurrencyId {get; set;}
         public int TargetCurrencyId {get; set;}
         public decimal Rate {get;set;}
     }

@@ -17,8 +17,12 @@ namespace CurrencyApi.Infrastructure
 
         public void Configure(IApplicationBuilder application)
         {
-            IEngine engine = EngineContext.Current;
-            var userManager = engine.Resolve<UserManager<User>>();
+            using IServiceScope? scope = EngineContext.Current.ServiceProvider?.CreateScope();
+
+            if (scope == null)
+                throw new InvalidOperationException("Service scope cannot be null during the seeding process.");
+
+            UserManager<User>? userManager = scope.ServiceProvider.GetService<UserManager<User>>();
 
             if (userManager == null)
                 throw new InvalidOperationException("User manager cannot be null during the seeding process.");
@@ -28,7 +32,7 @@ namespace CurrencyApi.Infrastructure
             if (user != null)
                 return;
 
-            RoleManager<IdentityRole>? roleManager = engine.Resolve<RoleManager<IdentityRole>>();
+            RoleManager<IdentityRole>? roleManager = scope.ServiceProvider.GetService<RoleManager<IdentityRole>>();
 
             if (roleManager == null)
                 throw new InvalidOperationException("Role manager cannot be null during the seeding process.");
@@ -36,13 +40,13 @@ namespace CurrencyApi.Infrastructure
             roleManager.CreateAsync(new IdentityRole("admin")).Wait();
             roleManager.CreateAsync(new IdentityRole("user")).Wait();
 
-            userManager.CreateAsync(new User("admin"), "defaultAdminPass").Wait();
+            userManager.CreateAsync(new User("admin"), "defaultAdminPass1!").Wait();
             User? adminUser = userManager.FindByNameAsync("admin").Result;
-            userManager.AddToRoleAsync(adminUser, "admin");
+            userManager.AddToRoleAsync(adminUser, "admin").Wait();
 
-            userManager.CreateAsync(new User("user"), "defaultUserPass").Wait();
+            userManager.CreateAsync(new User("user"), "defaultUserPass1!").Wait();
             User? simpleUser = userManager.FindByNameAsync("user").Result;
-            userManager.AddToRoleAsync(simpleUser, "user");
+            userManager.AddToRoleAsync(simpleUser, "user").Wait();
         }
 
         public int Order => 200;

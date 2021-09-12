@@ -35,23 +35,23 @@ namespace CurrencyApi.Infrastructure.Services
 
             await _unitOfWork.CommitAsync();
 
-            return new CreateCurrencyResult {Data = createdCurrency};
+            return new CreateCurrencyResult {Data = createdCurrency, Succeeded = true};
         }
 
-        public async Task<UpdateCurrencyResult> UpdateAsync(UpdateCurrencyRequest request)
+        public async Task<UpdateCurrencyResult> UpdateAsync(int id, UpdateCurrencyRequest request)
         {
             ValidationResult validationResult = ValidateRequest(request);
 
             if (validationResult.HasErrors)
                 return new UpdateCurrencyResult {Errors = validationResult.Errors!.ToList(), Succeeded = false};
 
-            Currency currencyToUpdate = new(request.Id, request.Name!, request.AlphabeticCode!, request.NumericCode, request.DecimalDigits);
+            Currency currencyToUpdate = new(id, request.Name!, request.AlphabeticCode!, request.NumericCode, request.DecimalDigits);
 
-            Currency createdCurrency = await _unitOfWork.Currencies.UpdateAsync(currencyToUpdate);
+            Currency updatedCurrency = await _unitOfWork.Currencies.UpdateAsync(currencyToUpdate);
 
             await _unitOfWork.CommitAsync();
 
-            return new UpdateCurrencyResult {Data = createdCurrency};
+            return new UpdateCurrencyResult {Data = updatedCurrency, Succeeded = true};
         }
 
         public async Task<DeleteCurrencyResult> DeleteAsync(int id)

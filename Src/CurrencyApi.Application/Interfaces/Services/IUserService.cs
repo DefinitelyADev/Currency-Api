@@ -9,7 +9,7 @@ namespace CurrencyApi.Application.Interfaces.Services
     public interface IUserService
     {
         Task<PagedResult<User>> GetAsync(GetUserRequest request);
-        Task<User?> GetByIdAsync(string id);
+        Task<User> GetByIdAsync(string id);
         Task<CreateUserResult> CreateAsync(CreateUserRequest request);
         Task<DeleteUserResult> DeleteAsync(string id);
         Task<UpdatePasswordResult> UpdatePasswordAsync(string username, ChangePasswordRequest request);

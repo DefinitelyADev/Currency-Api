@@ -23,17 +23,23 @@ namespace CurrencyApi.Infrastructure.Data.Repositories
         public async Task<PagedResult<CurrencyRate>> FindAsync(PagedRequest paginationParams, Expression<Func<CurrencyRate, bool>> predicate)
         {
             int totalCount = await _dbContext.CurrencyRates.CountAsync(predicate);
-            List<CurrencyRate>? data = await _dbContext.CurrencyRates.Where(predicate).ApplyPaginationParameters(paginationParams).ToListAsync();
+            List<CurrencyRate>? data = await _dbContext.CurrencyRates
+                .Include(rate => rate.OriginCurrency)
+                .Include(rate => rate.TargetCurrency)
+                .Where(predicate).ApplyPaginationParameters(paginationParams).ToListAsync();
 
             if (data == null || !data.Any())
                 throw new RecordNotFoundException();
 
-            return new PagedResult<CurrencyRate>(data, totalCount);
+            return new PagedResult<CurrencyRate>(data, totalCount) { Succeeded = true };
         }
 
         public async Task<CurrencyRate> GetByIdAsync(int id)
         {
-            CurrencyRate? data = await _dbContext.CurrencyRates.FirstOrDefaultAsync(currencyRate => currencyRate.Id == id);
+            CurrencyRate? data = await _dbContext.CurrencyRates
+                .Include(rate => rate.OriginCurrency)
+                .Include(rate => rate.TargetCurrency)
+                .FirstOrDefaultAsync(currencyRate => currencyRate.Id == id);
 
             if (data == null)
                 throw new RecordNotFoundException();

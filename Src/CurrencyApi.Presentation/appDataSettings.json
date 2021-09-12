@@ -1,5 +1,5 @@
 ﻿{
-    "ConnectionString": "Server=127.0.0.1;Port=3306;Database=currency_api;AllowUserVariables=True;Convert Zero Datetime=True;User Id=root;Password=superStrongPass",
+    "ConnectionString": "Server=127.0.0.1;Port=3306;Database=currency_api;AllowUserVariables=True;User Id=root;",
     "DataProvider": "MySql",
     "EnableSensitiveDataLogging": true,
     "RawDataSettings": {}

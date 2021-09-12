@@ -75,15 +75,13 @@ namespace CurrencyApi.Infrastructure.Extensions
 
         private static DbContextOptionsBuilder ConfigureSqlServer(DbContextOptionsBuilder options, string connectionString)
         {
-            // options.UseSqlServer(connectionString, b => b.MigrationsAssembly("ArtemisPlatform.Presentation.Server"));
-            options.UseSqlServer(connectionString);
+            options.UseSqlServer(connectionString, b => b.MigrationsAssembly("CurrencyApi.Migrations.SqlServer"));
             return options;
         }
 
         private static DbContextOptionsBuilder ConfigurePostgreSql(DbContextOptionsBuilder options, string connectionString)
         {
-            // options.UseNpgsql(connectionString, b => b.MigrationsAssembly("ArtemisPlatform.Presentation.Server"));
-            options.UseNpgsql(connectionString);
+            options.UseNpgsql(connectionString, b => b.MigrationsAssembly("CurrencyApi.Migrations.PostgreSql"));
             return options;
         }
 
@@ -93,7 +91,7 @@ namespace CurrencyApi.Infrastructure.Extensions
             options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString), b =>
             {
                 b.SchemaBehavior(MySqlSchemaBehavior.Translate, (_, objectName) => objectName);
-                // b.MigrationsAssembly("ArtemisPlatform.Presentation.Server");
+                b.MigrationsAssembly("CurrencyApi.Migrations.MySql");
             });
             return options;
         }

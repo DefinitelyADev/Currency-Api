@@ -20,6 +20,6 @@ namespace CurrencyApi.Infrastructure
             application.UseSerilogRequestLogging();
         }
 
-        public int Order => 300;
+        public int Order => 1100;
     }
 }

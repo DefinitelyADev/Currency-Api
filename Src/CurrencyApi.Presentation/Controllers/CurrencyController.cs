@@ -35,7 +35,7 @@ namespace CurrencyApi.Presentation.Controllers
         public async Task<IActionResult> GetById(int id)
         {
             Currency result = await _currencyService.GetByIdAsync(id);
-            
+
             return Ok(result);
         }
 
@@ -54,7 +54,7 @@ namespace CurrencyApi.Presentation.Controllers
         [HttpPut("{id:int}")]
         public async Task<IActionResult> Update(int id, UpdateCurrencyRequest request)
         {
-            UpdateCurrencyResult result = await _currencyService.UpdateAsync(request);
+            UpdateCurrencyResult result = await _currencyService.UpdateAsync(id, request);
 
             if (result.Succeeded)
                 return NoContent();
@@ -70,7 +70,7 @@ namespace CurrencyApi.Presentation.Controllers
             if (result.Succeeded)
                 return NoContent();
 
-            return BadRequest(new Response<object>($"Could not delete currency.").WithErrors(result.Errors).WithData(new { Id = id}));
+            return BadRequest(new Response<object>($"Could not delete currency.").WithErrors(result.Errors).WithData(new {Id = id}));
         }
     }
 }

@@ -28,7 +28,7 @@ namespace CurrencyApi.Infrastructure.Data.Repositories
             if (data == null || !data.Any())
                 throw new RecordNotFoundException();
 
-            return new PagedResult<Currency>(data, totalCount);
+            return new PagedResult<Currency>(data, totalCount) { Succeeded = true };
         }
 
         public async Task<Currency> GetByIdAsync(int id)

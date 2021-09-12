@@ -13,7 +13,7 @@ namespace CurrencyApi.Application.Interfaces.Services
         Task<CurrencyRate> GetByIdsAsync(int originCurrencyId, int targetCurrencyId);
         Task<CalculationResult> CalculateByIdsAsync(int originCurrencyId, int targetCurrencyId, decimal amount);
         Task<CreateCurrencyRateResult> CreateAsync(CreateCurrencyRateRequest request);
-        Task<UpdateCurrencyRateResult> UpdateAsync(UpdateCurrencyRateRequest request);
+        Task<UpdateCurrencyRateResult> UpdateAsync(int id, UpdateCurrencyRateRequest request);
         Task<DeleteCurrencyRateResult> DeleteAsync(int id);
     }
 }
