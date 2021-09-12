@@ -45,7 +45,7 @@ namespace CurrencyApi.Presentation.Controllers
             CreateCurrencyResult result = await _currencyService.CreateAsync(request);
 
             if (result.Data != null && result.Succeeded)
-                return CreatedAtAction(nameof(GetById), new {id = result.Data.Id}, result.Data);
+                return CreatedAtAction(nameof(GetById), new { id = result.Data.Id }, result.Data);
 
             return BadRequest(new Response<CreateCurrencyRequest>("Could not create currency.").WithErrors(result.Errors).WithData(request));
 
@@ -70,7 +70,7 @@ namespace CurrencyApi.Presentation.Controllers
             if (result.Succeeded)
                 return NoContent();
 
-            return BadRequest(new Response<object>($"Could not delete currency.").WithErrors(result.Errors).WithData(new {Id = id}));
+            return BadRequest(new Response<object>($"Could not delete currency.").WithErrors(result.Errors).WithData(new { Id = id }));
         }
     }
 }

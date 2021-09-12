@@ -5,7 +5,7 @@ using Microsoft.Extensions.FileProviders;
 
 namespace CurrencyApi.Application.Interfaces.Core
 {
-     /// <summary>
+    /// <summary>
     /// A file provider abstraction
     /// </summary>
     public interface IWebAppFileProvider : IFileProvider

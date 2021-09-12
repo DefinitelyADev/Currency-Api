@@ -35,7 +35,7 @@ namespace CurrencyApi.Infrastructure.Services
             ValidationResult validationResult = ValidateRequest(request);
 
             if (validationResult.HasErrors)
-                return new CreateUserResult {Errors = validationResult.Errors!.ToList(), Succeeded = false};
+                return new CreateUserResult { Errors = validationResult.Errors!.ToList(), Succeeded = false };
 
             User user = new(request.Username);
 
@@ -43,7 +43,7 @@ namespace CurrencyApi.Infrastructure.Services
             IdentityResult roleResult = await _userManager.AddToRoleAsync(user, "user");
 
             if (creationResult.Succeeded && roleResult.Succeeded)
-                return new CreateUserResult {Data = user, Succeeded = true};
+                return new CreateUserResult { Data = user, Succeeded = true };
 
             List<string> errors = creationResult.Errors
                 .Select(error => error.Description)
@@ -64,7 +64,7 @@ namespace CurrencyApi.Infrastructure.Services
 
             await _unitOfWork.CommitAsync();
 
-            return new DeleteUserResult {Succeeded = result};
+            return new DeleteUserResult { Succeeded = result };
         }
 
         public async Task<UpdatePasswordResult> UpdatePasswordAsync(string username, ChangePasswordRequest request)
@@ -72,19 +72,19 @@ namespace CurrencyApi.Infrastructure.Services
             ValidationResult validationResult = ValidateRequest(request);
 
             if (validationResult.HasErrors)
-                return new UpdatePasswordResult {Errors = validationResult.Errors!.ToList(), Succeeded = false};
+                return new UpdatePasswordResult { Errors = validationResult.Errors!.ToList(), Succeeded = false };
 
             User? user = await _userManager.FindByNameAsync(username);
 
             if (user == null)
-                return new UpdatePasswordResult {Errors = new List<string> {"User does not exist."}, Succeeded = false};
+                return new UpdatePasswordResult { Errors = new List<string> { "User does not exist." }, Succeeded = false };
 
             IdentityResult result = await _userManager.ChangePasswordAsync(user, request.Password, request.NewPassword);
 
             if (!result.Succeeded)
                 throw new IdentityResultException(result.Errors);
 
-            return new UpdatePasswordResult {Succeeded = result.Succeeded, Errors = result.Errors.Select(error => error.Description).ToList()};
+            return new UpdatePasswordResult { Succeeded = result.Succeeded, Errors = result.Errors.Select(error => error.Description).ToList() };
         }
 
         private Expression<Func<User, bool>> GetExpressionFromRequest(GetUserRequest request)

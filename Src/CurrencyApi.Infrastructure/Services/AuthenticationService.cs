@@ -52,7 +52,7 @@ namespace CurrencyApi.Infrastructure.Services
                 return new AuthenticationResult
                 {
                     Succeeded = false,
-                    Errors = new List<string> {"Username or password is incorrect."}
+                    Errors = new List<string> { "Username or password is incorrect." }
                 };
             }
 
@@ -91,7 +91,8 @@ namespace CurrencyApi.Infrastructure.Services
             RefreshToken storedRefreshToken = await _unitOfWork.Tokens.GetAsync(request.RefreshToken);
 
             //Check if refresh token has expired
-            if (DateTime.UtcNow > storedRefreshToken.DateEnd) {
+            if (DateTime.UtcNow > storedRefreshToken.DateEnd)
+            {
                 return new AuthenticationResult
                 {
                     Succeeded = false,
@@ -156,10 +157,11 @@ namespace CurrencyApi.Infrastructure.Services
             SigningCredentials credentials = new(securityKey, SecurityAlgorithms.HmacSha256);
 
             //Information about the user
-            List<Claim> claims = new() {
+            List<Claim> claims = new()
+            {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id),
                 new Claim(JwtRegisteredClaimNames.Name, user.UserName),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString() )
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 
             IList<string>? roles = await _userManager.GetRolesAsync(user);

@@ -12,7 +12,7 @@ namespace CurrencyApi.Infrastructure
 
         public void Configure(IApplicationBuilder application)
         {
-            var options = new ForwardedHeadersOptions {ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto};
+            var options = new ForwardedHeadersOptions { ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto };
             application.UseForwardedHeaders(options);
         }
 

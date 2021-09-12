@@ -13,7 +13,7 @@ namespace CurrencyApi.Infrastructure
         {
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo {Title = "Currency Api", Version = "v1"});
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Currency Api", Version = "v1" });
 
                 //Add "Authorize" button on Swagger UI so we can test JWT tokens with swagger
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme

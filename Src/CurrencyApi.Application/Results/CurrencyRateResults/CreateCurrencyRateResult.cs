@@ -2,7 +2,7 @@
 
 namespace CurrencyApi.Application.Results.CurrencyRateResults
 {
-    public class CreateCurrencyRateResult: DataResult<CurrencyRate>
+    public class CreateCurrencyRateResult : DataResult<CurrencyRate>
     {
 
     }

@@ -27,12 +27,12 @@ namespace CurrencyApi.Domain.EntityMappings
             builder.HasIndex(p => p.NumericCode).IsUnique();
 
             builder.HasData(
-                new Currency (1, "Euro", "EUR", 978, 2),
-                new Currency (2, "United States dollar", "USD", 840, 2),
-                new Currency (3, "Japanese yen", "JPY", 392, 0),
-                new Currency (4, "Swiss franc", "CHF", 756, 2),
-                new Currency (5, "Canadian dollar", "CAD", 124, 2),
-                new Currency (6, "Pound sterling", "GBP", 826, 2)
+                new Currency(1, "Euro", "EUR", 978, 2),
+                new Currency(2, "United States dollar", "USD", 840, 2),
+                new Currency(3, "Japanese yen", "JPY", 392, 0),
+                new Currency(4, "Swiss franc", "CHF", 756, 2),
+                new Currency(5, "Canadian dollar", "CAD", 124, 2),
+                new Currency(6, "Pound sterling", "GBP", 826, 2)
             );
         }
     }

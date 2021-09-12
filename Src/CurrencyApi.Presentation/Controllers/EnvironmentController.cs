@@ -28,8 +28,8 @@ namespace CurrencyApi.Presentation.Controllers
                 .Where(ad => ad.AttributeRouteInfo != null)
                 .Select(x => new
                 {
-                    Action = x is {RouteValues: { }} ? x.RouteValues["action"] : "n/a",
-                    Controller = x is {RouteValues: { }} ? x.RouteValues["controller"] : "n/a",
+                    Action = x is { RouteValues: { } } ? x.RouteValues["action"] : "n/a",
+                    Controller = x is { RouteValues: { } } ? x.RouteValues["controller"] : "n/a",
                     Name = x.AttributeRouteInfo?.Name ?? "n/a",
                     Template = x.AttributeRouteInfo?.Template ?? "n/a",
                     Method = x.ActionConstraints?.OfType<HttpMethodActionConstraint>().FirstOrDefault()?.HttpMethods.First()

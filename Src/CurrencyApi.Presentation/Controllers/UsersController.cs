@@ -43,7 +43,7 @@ namespace CurrencyApi.Presentation.Controllers
             CreateUserResult result = await _userService.CreateAsync(request);
 
             if (result.Data != null && result.Succeeded)
-                return CreatedAtAction(nameof(GetById), new {id = result.Data.Id}, result.Data);
+                return CreatedAtAction(nameof(GetById), new { id = result.Data.Id }, result.Data);
 
             return BadRequest(new Response<CreateUserRequest>("Could not create user.").WithErrors(result.Errors).WithData(request));
 
@@ -74,7 +74,7 @@ namespace CurrencyApi.Presentation.Controllers
             if (result.Succeeded)
                 return NoContent();
 
-            return BadRequest(new Response<object>($"Could not delete user.").WithErrors(result.Errors).WithData(new {Id = id}));
+            return BadRequest(new Response<object>($"Could not delete user.").WithErrors(result.Errors).WithData(new { Id = id }));
         }
     }
 }

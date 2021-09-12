@@ -29,29 +29,29 @@ namespace CurrencyApi.Infrastructure.Services
 
             decimal result = amount * currencyRate.Rate;
 
-            return new CalculationResult {Result = result};
+            return new CalculationResult { Result = result };
         }
 
         public async Task<CreateCurrencyRateResult> CreateAsync(CreateCurrencyRateRequest request)
         {
-            CurrencyRate newCurrencyRate = new() {Rate = request.Rate, OriginCurrencyId = request.CurrencyId, TargetCurrencyId = request.TargetCurrencyId};
+            CurrencyRate newCurrencyRate = new() { Rate = request.Rate, OriginCurrencyId = request.CurrencyId, TargetCurrencyId = request.TargetCurrencyId };
 
             CurrencyRate createdCurrencyRate = await _unitOfWork.CurrencyRates.AddAsync(newCurrencyRate);
 
             await _unitOfWork.CommitAsync();
 
-            return new CreateCurrencyRateResult {Data = createdCurrencyRate, Succeeded = true};
+            return new CreateCurrencyRateResult { Data = createdCurrencyRate, Succeeded = true };
         }
 
         public async Task<UpdateCurrencyRateResult> UpdateAsync(int id, UpdateCurrencyRateRequest request)
         {
-            CurrencyRate currencyRateToUpdate = new() {Id = id, Rate = request.Rate, OriginCurrencyId = request.OriginCurrencyId, TargetCurrencyId = request.TargetCurrencyId};
+            CurrencyRate currencyRateToUpdate = new() { Id = id, Rate = request.Rate, OriginCurrencyId = request.OriginCurrencyId, TargetCurrencyId = request.TargetCurrencyId };
 
             CurrencyRate createdCurrencyRate = await _unitOfWork.CurrencyRates.UpdateAsync(currencyRateToUpdate);
 
             await _unitOfWork.CommitAsync();
 
-            return new UpdateCurrencyRateResult {Data = createdCurrencyRate, Succeeded = true};
+            return new UpdateCurrencyRateResult { Data = createdCurrencyRate, Succeeded = true };
         }
 
         public async Task<DeleteCurrencyRateResult> DeleteAsync(int id)
@@ -60,7 +60,7 @@ namespace CurrencyApi.Infrastructure.Services
 
             await _unitOfWork.CommitAsync();
 
-            return new DeleteCurrencyRateResult {Succeeded = result};
+            return new DeleteCurrencyRateResult { Succeeded = result };
         }
 
         private Expression<Func<CurrencyRate, bool>> GetExpressionFromRequest(GetCurrencyRateRequest request)

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CurrencyApi.Presentation.Controllers
 {
-    [ApiExplorerSettings(IgnoreApi=true)]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class ErrorController : BaseApiController
     {
         [Route("/error-local-development")]
