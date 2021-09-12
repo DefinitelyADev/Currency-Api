@@ -148,11 +148,16 @@ namespace CurrencyApi.Infrastructure.Services
             SigningCredentials credentials = new(securityKey, SecurityAlgorithms.HmacSha256);
 
             //Information about the user
-            Claim[] claims = {
-                new(JwtRegisteredClaimNames.Sub, user.Id),
-                new(JwtRegisteredClaimNames.Name, user.UserName),
-                new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString() )
+            List<Claim> claims = new() {
+                new Claim(JwtRegisteredClaimNames.Sub, user.Id),
+                new Claim(JwtRegisteredClaimNames.Name, user.UserName),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString() )
             };
+
+            IList<string>? roles = await _userManager.GetRolesAsync(user);
+
+            if (roles != null)
+                claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
 
             //Generate access token
             JwtSecurityToken accessToken = new(

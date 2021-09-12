@@ -18,7 +18,7 @@ namespace CurrencyApi.Infrastructure.Services
 
         public CurrencyService(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
 
-        public async Task<PagedResult<Currency>> GetAsync(GetCurrencyRequest request) => await _unitOfWork.Currencies.FindAsync(GetExpressionFromRequest(request));
+        public async Task<PagedResult<Currency>> GetAsync(GetCurrencyRequest request) => await _unitOfWork.Currencies.FindAsync(request, GetExpressionFromRequest(request));
 
         public async Task<Currency> GetByIdAsync(int id) => await _unitOfWork.Currencies.GetByIdAsync(id);
 
@@ -56,11 +56,6 @@ namespace CurrencyApi.Infrastructure.Services
 
         public async Task<DeleteCurrencyResult> DeleteAsync(int id)
         {
-            ValidationResult validationResult = ValidateDeleteRequest(id);
-
-            if (validationResult.HasErrors)
-                return new DeleteCurrencyResult {Errors = validationResult.Errors!.ToList(), Succeeded = false};
-
             bool result = await _unitOfWork.Currencies.RemoveAsync(id);
 
             await _unitOfWork.CommitAsync();
@@ -72,8 +67,8 @@ namespace CurrencyApi.Infrastructure.Services
 
         private Expression<Func<Currency, bool>> GetExpressionFromRequest(GetCurrencyRequest request)
         {
-            Expression<Func<Currency, bool>> expression = currency => (ObjectHelper.IsNull(request.Name) || currency.Name.Contains(request.Name))
-                                                                  && (ObjectHelper.IsNull(request.AlphabeticCode) || currency.AlphabeticCode.Contains(request.AlphabeticCode))
+            Expression<Func<Currency, bool>> expression = currency => (ObjectHelper.IsNull(request.Name) || currency.Name.ToUpper().Contains(request.Name.ToUpper()))
+                                                                  && (ObjectHelper.IsNull(request.AlphabeticCode) || currency.AlphabeticCode.ToUpper().Contains(request.AlphabeticCode.ToUpper()))
                                                                   && (ObjectHelper.IsNull(request.DecimalDigits) || currency.DecimalDigits == request.DecimalDigits)
                                                                   && (ObjectHelper.IsNull(request.NumericCode) || currency.NumericCode == request.NumericCode);
             return expression;
@@ -113,16 +108,6 @@ namespace CurrencyApi.Infrastructure.Services
 
             if (request.NumericCode < 0)
                 result.AddError("Numeric code cannot be less than 0.");
-
-            return result;
-        }
-
-        private ValidationResult ValidateDeleteRequest(int id)
-        {
-            ValidationResult result = new();
-
-            if (id < 0)
-                result.AddError("Decimal digits cannot be less than 0.");
 
             return result;
         }

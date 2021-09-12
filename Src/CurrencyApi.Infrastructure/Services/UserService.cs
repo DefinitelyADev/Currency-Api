@@ -26,7 +26,7 @@ namespace CurrencyApi.Infrastructure.Services
             _userManager = userManager;
         }
 
-        public async Task<PagedResult<User>> GetAsync(GetUserRequest request) => await _unitOfWork.Users.FindAsync(GetExpressionFromRequest(request));
+        public async Task<PagedResult<User>> GetAsync(GetUserRequest request) => await _unitOfWork.Users.FindAsync(request, GetExpressionFromRequest(request));
 
         public async Task<User?> GetByIdAsync(string id) => await _unitOfWork.Users.GetByIdAsync(id);
 
@@ -48,11 +48,6 @@ namespace CurrencyApi.Infrastructure.Services
 
         public async Task<DeleteUserResult> DeleteAsync(string id)
         {
-            ValidationResult validationResult = ValidateDeleteRequest(id);
-
-            if (validationResult.HasErrors)
-                return new DeleteUserResult {Errors = validationResult.Errors!.ToList(), Succeeded = false};
-
             bool result = await _unitOfWork.Users.RemoveAsync(id);
 
             await _unitOfWork.CommitAsync();
@@ -82,7 +77,7 @@ namespace CurrencyApi.Infrastructure.Services
 
         private Expression<Func<User, bool>> GetExpressionFromRequest(GetUserRequest request)
         {
-            Expression<Func<User, bool>> expression = user => ObjectHelper.IsNull(request.Username) || user.UserName.Contains(request.Username);
+            Expression<Func<User, bool>> expression = user => ObjectHelper.IsNull(request.Username) || user.NormalizedUserName.Contains(request.Username.ToUpper());
             return expression;
         }
 
@@ -117,16 +112,6 @@ namespace CurrencyApi.Infrastructure.Services
 
             if (request.ConfirmPassword.Equals(request.NewPassword))
                 result.AddError("Password and password confirmation must match.");
-
-            return result;
-        }
-
-        private ValidationResult ValidateDeleteRequest(string id)
-        {
-            ValidationResult result = new();
-
-            if (string.IsNullOrWhiteSpace(id))
-                result.AddError("Id cannot be empty.");
 
             return result;
         }

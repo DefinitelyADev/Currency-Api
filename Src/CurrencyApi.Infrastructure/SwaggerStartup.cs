@@ -1,4 +1,5 @@
-﻿using CurrencyApi.Application.Interfaces.Core;
+﻿using System;
+using CurrencyApi.Application.Interfaces.Core;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,6 +14,32 @@ namespace CurrencyApi.Infrastructure
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo {Title = "Currency Api", Version = "v1"});
+
+                //Add "Authorize" button on Swagger UI so we can test JWT tokens with swagger
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer",
+                    BearerFormat = "JWT",
+                    In = ParameterLocation.Header,
+                    Description = "JWT Authorization header using the Bearer scheme."
+                });
+
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        Array.Empty<string>()
+                    }
+                });
             });
         }
 
@@ -26,6 +53,6 @@ namespace CurrencyApi.Infrastructure
             });
         }
 
-        public int Order => 1001;
+        public int Order => 300;
     }
 }

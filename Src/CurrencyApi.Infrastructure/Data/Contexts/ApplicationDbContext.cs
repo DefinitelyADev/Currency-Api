@@ -27,6 +27,7 @@ namespace CurrencyApi.Infrastructure.Data.Contexts
         }
 
         public DbSet<Currency> Currencies { get; set; }
+        public DbSet<CurrencyRate> CurrencyRates { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
     }
 #nullable restore

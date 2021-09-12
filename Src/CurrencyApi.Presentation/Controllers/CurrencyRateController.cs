@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using CurrencyApi.Application.Extensions;
 using CurrencyApi.Application.Interfaces.Services;
-using CurrencyApi.Application.Requests.Currency;
 using CurrencyApi.Application.Requests.CurrencyRate;
 using CurrencyApi.Application.Responses;
 using CurrencyApi.Application.Results;
@@ -11,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CurrencyApi.Presentation.Controllers
 {
+    [Route("[controller]")]
     public class CurrencyRateController : BaseApiController
     {
         private readonly ICurrencyRateService _currencyRateService;

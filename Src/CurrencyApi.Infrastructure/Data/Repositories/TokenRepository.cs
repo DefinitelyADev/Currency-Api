@@ -1,7 +1,9 @@
 ﻿using System.Threading.Tasks;
+using CurrencyApi.Application.Exceptions;
 using CurrencyApi.Application.Interfaces.Data.Repositories;
 using CurrencyApi.Domain.Entities;
 using CurrencyApi.Infrastructure.Data.Contexts;
+using Microsoft.EntityFrameworkCore;
 
 namespace CurrencyApi.Infrastructure.Data.Repositories
 {
@@ -11,19 +13,34 @@ namespace CurrencyApi.Infrastructure.Data.Repositories
 
         public TokenRepository(ApplicationDbContext dbContext) => _dbContext = dbContext;
 
-        public Task<RefreshToken> GetAsync(string id)
+        public async Task<RefreshToken> GetAsync(string id)
         {
-            throw new System.NotImplementedException();
+            RefreshToken? data = await _dbContext.RefreshTokens.FirstOrDefaultAsync(token => token.Token == id);
+
+            if (data == null)
+                throw new RecordNotFoundException();
+
+            return data;
         }
 
-        public Task<RefreshToken> AddAsync(RefreshToken item)
+        public async Task<RefreshToken> AddAsync(RefreshToken item)
         {
-            throw new System.NotImplementedException();
+            await _dbContext.RefreshTokens.AddAsync(item);
+
+            return item;
         }
 
-        public Task<RefreshToken> UpdateAsync(RefreshToken item)
+        public async Task<RefreshToken> UpdateAsync(RefreshToken item)
         {
-            throw new System.NotImplementedException();
+            RefreshToken? data = await _dbContext.RefreshTokens.FirstOrDefaultAsync(token => token.Token == item.Token);
+
+            if (data == null)
+                throw new RecordNotFoundException();
+
+            data.Invalidated = item.Invalidated;
+            data.Used = item.Used;
+
+            return data;
         }
     }
 }

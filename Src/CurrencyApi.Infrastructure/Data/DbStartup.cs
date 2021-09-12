@@ -34,7 +34,18 @@ namespace CurrencyApi.Infrastructure.Data
             services.AddEntityFrameworkCoreIdentity();
         }
 
-        public void Configure(IApplicationBuilder application) { }
+        public void Configure(IApplicationBuilder application)
+        {
+
+            //further actions are performed only when the database is installed
+            if (DataSettingsManager.IsDatabaseInstalled())
+            {
+#if !DEBUG      //prevent save the update migrations into the DB during the developing process
+                ApplicationDbContext dbContext = engine.ResolveRequired<ApplicationDbContext>();
+                dbContext.Database.MigrateAsync().Wait();
+#endif
+            }
+        }
 
         public int Order => 10;
 

@@ -18,17 +18,7 @@ namespace CurrencyApi.Infrastructure.Extensions
         {
             IEngine engine = EngineContext.Current;
 
-            //further actions are performed only when the database is installed
-            if (DataSettingsManager.IsDatabaseInstalled())
-            {
-#if !DEBUG      //prevent save the update migrations into the DB during the developing process
-                ApplicationDbContext dbContext = engine.ResolveRequired<ApplicationDbContext>();
-                dbContext.Database.MigrateAsync().Wait();
-#endif
-
-                //log application start
-            }
-                engine.Resolve<ILogger<EngineContext>>().LogInformation("Application started...");
+            engine.Resolve<ILogger<EngineContext>>().LogInformation("Application started...");
         }
     }
 }

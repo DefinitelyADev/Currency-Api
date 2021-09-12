@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace CurrencyApi.Domain.Entities
 {
     public class Currency
@@ -18,7 +20,7 @@ namespace CurrencyApi.Domain.Entities
             NumericCode = numericCode;
             DecimalDigits = decimalDigits;
         }
-        
+
         public int Id { get; set; }
         public string Name { get; set; }
         public string AlphabeticCode { get; set; }

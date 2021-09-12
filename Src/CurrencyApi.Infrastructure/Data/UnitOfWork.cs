@@ -18,11 +18,13 @@ namespace CurrencyApi.Infrastructure.Data
             Tokens = new TokenRepository(_dbContext);
             Users = new UserRepository(_dbContext);
             Currencies = new CurrencyRepository(_dbContext);
+            CurrencyRates = new CurrencyRateRepository(_dbContext);
         }
 
         public ITokenRepository Tokens { get; }
         public IUserRepository Users { get; }
         public ICurrencyRepository Currencies { get; }
+        public ICurrencyRateRepository CurrencyRates { get; }
         public async Task<int> CommitAsync() => await _dbContext.SaveChangesAsync();
 
         private void Dispose(bool disposing)
@@ -30,7 +32,7 @@ namespace CurrencyApi.Infrastructure.Data
             if (!disposing)
                 return;
 
-            // _dbContext.Dispose();
+            _dbContext.Dispose();
         }
 
         public void Dispose()
