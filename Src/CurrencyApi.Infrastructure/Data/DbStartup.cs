@@ -1,9 +1,13 @@
 ﻿using System;
+using CurrencyApi.Application.Exceptions;
 using CurrencyApi.Application.Helpers;
 using CurrencyApi.Application.Interfaces.Core;
+using CurrencyApi.Infrastructure.Core.Engine;
+using CurrencyApi.Infrastructure.Data.Contexts;
 using CurrencyApi.Infrastructure.Data.Settings;
 using CurrencyApi.Infrastructure.Extensions;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -41,7 +45,16 @@ namespace CurrencyApi.Infrastructure.Data
             if (DataSettingsManager.IsDatabaseInstalled())
             {
 #if !DEBUG      //prevent save the update migrations into the DB during the developing process
-                ApplicationDbContext dbContext = engine.ResolveRequired<ApplicationDbContext>();
+                using IServiceScope? scope = EngineContext.Current.ServiceProvider?.CreateScope();
+
+                if (scope == null)
+                    throw new WebAppException("Service scope cannot be null during the migration process.");
+
+                ApplicationDbContext? dbContext = scope.ServiceProvider.GetService<ApplicationDbContext>();
+
+                if (dbContext == null)
+                    throw new WebAppException("Application db context cannot be null during the migration process.");
+
                 dbContext.Database.MigrateAsync().Wait();
 #endif
             }

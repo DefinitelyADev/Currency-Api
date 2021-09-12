@@ -1,5 +1,4 @@
-﻿using CurrencyApi.Application.Interfaces.Core;
-using CurrencyApi.Infrastructure.Core.Engine;
+﻿using CurrencyApi.Infrastructure.Core.Engine;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Logging;
 
@@ -15,9 +14,7 @@ namespace CurrencyApi.Infrastructure.Extensions
 
         public static void StartEngine(this IApplicationBuilder application)
         {
-            IEngine engine = EngineContext.Current;
-
-            engine.Resolve<ILogger<EngineContext>>().LogInformation("Application started...");
+            EngineContext.Current.Resolve<ILogger<EngineContext>>().LogInformation("Application started...");
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+﻿using CurrencyApi.Application.Exceptions;
 using CurrencyApi.Application.Interfaces.Core;
 using CurrencyApi.Domain.Entities;
 using CurrencyApi.Infrastructure.Core.Engine;
@@ -18,12 +18,12 @@ namespace CurrencyApi.Infrastructure
             using IServiceScope? scope = EngineContext.Current.ServiceProvider?.CreateScope();
 
             if (scope == null)
-                throw new InvalidOperationException("Service scope cannot be null during the seeding process.");
+                throw new WebAppException("Service scope cannot be null during the seeding process.");
 
             UserManager<User>? userManager = scope.ServiceProvider.GetService<UserManager<User>>();
 
             if (userManager == null)
-                throw new InvalidOperationException("User manager cannot be null during the seeding process.");
+                throw new WebAppException("User manager cannot be null during the seeding process.");
 
             User? user = userManager.FindByNameAsync("admin").Result;
 
@@ -33,7 +33,7 @@ namespace CurrencyApi.Infrastructure
             RoleManager<IdentityRole>? roleManager = scope.ServiceProvider.GetService<RoleManager<IdentityRole>>();
 
             if (roleManager == null)
-                throw new InvalidOperationException("Role manager cannot be null during the seeding process.");
+                throw new WebAppException("Role manager cannot be null during the seeding process.");
 
             roleManager.CreateAsync(new IdentityRole("admin")).Wait();
             roleManager.CreateAsync(new IdentityRole("user")).Wait();
