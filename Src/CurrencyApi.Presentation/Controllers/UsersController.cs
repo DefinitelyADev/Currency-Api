@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using CurrencyApi.Application.Extensions;
 using CurrencyApi.Application.Interfaces.Services;
-using CurrencyApi.Application.Requests.Currency;
 using CurrencyApi.Application.Requests.User;
 using CurrencyApi.Application.Responses;
 using CurrencyApi.Application.Results;
@@ -12,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CurrencyApi.Presentation.Controllers
 {
-    [Microsoft.AspNetCore.Components.Route("[controller]")]
+    [Route("[controller]")]
     public class UsersController : BaseApiController
     {
         private readonly IUserService _userService;
@@ -50,7 +49,7 @@ namespace CurrencyApi.Presentation.Controllers
 
         }
 
-        [HttpPost]
+        [HttpPost("update-password")]
         public async Task<IActionResult> UpdatePassword([FromBody] ChangePasswordRequest request)
         {
             string? username = HttpContext.User.Identity?.Name;

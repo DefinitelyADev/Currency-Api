@@ -1,6 +1,5 @@
 ﻿using CurrencyApi.Application.Interfaces.Core;
 using CurrencyApi.Infrastructure.Core.Engine;
-using CurrencyApi.Infrastructure.Data.Settings;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Logging;
 

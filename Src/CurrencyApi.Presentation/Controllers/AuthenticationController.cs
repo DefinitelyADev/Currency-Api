@@ -2,7 +2,6 @@
 using CurrencyApi.Application.Interfaces.Services;
 using CurrencyApi.Application.Requests.Authentication;
 using CurrencyApi.Application.Results.AuthenticationResults;
-using CurrencyApi.Infrastructure.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

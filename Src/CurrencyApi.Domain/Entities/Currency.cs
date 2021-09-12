@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace CurrencyApi.Domain.Entities
 {
     public class Currency

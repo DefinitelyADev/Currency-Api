@@ -37,13 +37,25 @@ namespace CurrencyApi.Infrastructure.Services
             if (validationResult.HasErrors)
                 return new CreateUserResult {Errors = validationResult.Errors!.ToList(), Succeeded = false};
 
-            User newUser = new(request.Username);
+            User user = new(request.Username);
 
-            User createdUser = await _unitOfWork.Users.AddAsync(newUser);
+            IdentityResult creationResult = await _userManager.CreateAsync(user, request.Password);
+            IdentityResult roleResult = await _userManager.AddToRoleAsync(user, "user");
 
-            await _unitOfWork.CommitAsync();
+            if (creationResult.Succeeded && roleResult.Succeeded)
+                return new CreateUserResult {Data = user, Succeeded = true};
 
-            return new CreateUserResult {Data = createdUser, Succeeded = true};
+            List<string> errors = creationResult.Errors
+                .Select(error => error.Description)
+                .Concat(roleResult.Errors.Select(error => error.Description))
+                .ToList();
+
+            return new CreateUserResult
+            {
+                Errors = errors,
+                Succeeded = false
+            };
+
         }
 
         public async Task<DeleteUserResult> DeleteAsync(string id)

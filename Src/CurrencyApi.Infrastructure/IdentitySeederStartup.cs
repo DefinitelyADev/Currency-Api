@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
 using CurrencyApi.Application.Interfaces.Core;
 using CurrencyApi.Domain.Entities;
 using CurrencyApi.Infrastructure.Core.Engine;
