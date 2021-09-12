@@ -26,29 +26,9 @@ namespace CurrencyApi.Infrastructure.Services
             _userManager = userManager;
         }
 
-        public PagedResult<User> Get(GetUserRequest request) => _unitOfWork.Users.Find(GetExpressionFromRequest(request));
-
         public async Task<PagedResult<User>> GetAsync(GetUserRequest request) => await _unitOfWork.Users.FindAsync(GetExpressionFromRequest(request));
 
-        public User GetById(string id) => _unitOfWork.Users.GetById(id);
-
         public async Task<User?> GetByIdAsync(string id) => await _unitOfWork.Users.GetByIdAsync(id);
-
-        public CreateUserResult Create(CreateUserRequest request)
-        {
-            ValidationResult validationResult = ValidateRequest(request);
-
-            if (validationResult.HasErrors)
-                return new CreateUserResult {Errors = validationResult.Errors!.ToList(), Succeeded = false};
-
-            User newUser = new(request.Username);
-
-            User createdUser = _unitOfWork.Users.Add(newUser);
-
-            _unitOfWork.Commit();
-
-            return new CreateUserResult {Data = createdUser};
-        }
 
         public async Task<CreateUserResult> CreateAsync(CreateUserRequest request)
         {
@@ -66,20 +46,6 @@ namespace CurrencyApi.Infrastructure.Services
             return new CreateUserResult {Data = createdUser};
         }
 
-        public DeleteUserResult Delete(string id)
-        {
-            ValidationResult validationResult = ValidateDeleteRequest(id);
-
-            if (validationResult.HasErrors)
-                return new DeleteUserResult {Errors = validationResult.Errors!.ToList(), Succeeded = false};
-
-            bool result = _unitOfWork.Users.Remove(id);
-
-            _unitOfWork.Commit();
-
-            return new DeleteUserResult {Succeeded = result};
-        }
-
         public async Task<DeleteUserResult> DeleteAsync(string id)
         {
             ValidationResult validationResult = ValidateDeleteRequest(id);
@@ -92,26 +58,6 @@ namespace CurrencyApi.Infrastructure.Services
             await _unitOfWork.CommitAsync();
 
             return new DeleteUserResult {Succeeded = result};
-        }
-
-        public UpdatePasswordResult UpdatePassword(string username, ChangePasswordRequest request)
-        {
-            ValidationResult validationResult = ValidateRequest(request);
-
-            if (validationResult.HasErrors)
-                return new UpdatePasswordResult {Errors = validationResult.Errors!.ToList(), Succeeded = false};
-
-            User? user = _userManager.FindByNameAsync(username).Result;
-
-            if (user == null)
-                return new UpdatePasswordResult {Errors = new List<string> {"User does not exist."}, Succeeded = false};
-
-            IdentityResult result = _userManager.ChangePasswordAsync(user, request.Password, request.NewPassword).Result;
-
-            if (!result.Succeeded)
-                throw new IdentityResultException(result.Errors);
-
-            return new UpdatePasswordResult {Succeeded = result.Succeeded, Errors = result.Errors.Select(error => error.Description).ToList()};
         }
 
         public async Task<UpdatePasswordResult> UpdatePasswordAsync(string username, ChangePasswordRequest request)

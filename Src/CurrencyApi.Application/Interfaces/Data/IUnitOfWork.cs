@@ -8,7 +8,6 @@ namespace CurrencyApi.Application.Interfaces.Data
         ITokenRepository Tokens { get; }
         IUserRepository Users { get; }
         ICurrencyRepository Currencies { get; }
-        int Commit();
         Task<int> CommitAsync();
     }
 }

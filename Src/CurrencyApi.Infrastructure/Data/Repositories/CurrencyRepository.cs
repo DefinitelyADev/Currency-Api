@@ -14,17 +14,7 @@ namespace CurrencyApi.Infrastructure.Data.Repositories
 
         public CurrencyRepository(ApplicationDbContext dbContext) => _dbContext = dbContext;
 
-        public PagedResult<Currency> Find(Expression<Func<Currency, bool>> predicate)
-        {
-            throw new NotImplementedException();
-        }
-
         public Task<PagedResult<Currency>> FindAsync(Expression<Func<Currency, bool>> predicate)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Currency GetById(int id)
         {
             throw new NotImplementedException();
         }
@@ -34,27 +24,12 @@ namespace CurrencyApi.Infrastructure.Data.Repositories
             throw new NotImplementedException();
         }
 
-        public Currency Add(Currency item)
-        {
-            throw new NotImplementedException();
-        }
-
         public Task<Currency> AddAsync(Currency item)
         {
             throw new NotImplementedException();
         }
 
-        public Currency Update(Currency item)
-        {
-            throw new NotImplementedException();
-        }
-
         public Task<Currency> UpdateAsync(Currency item)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool Remove(int id)
         {
             throw new NotImplementedException();
         }

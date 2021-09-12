@@ -23,7 +23,7 @@ namespace CurrencyApi.Domain.Entities
             UserId = userId;
         }
 
-        public string Token { get; set; }
+        public string? Token { get; set; }
         public string JwtId { get; set; }
         public DateTime DateStart { get; set; }
         public DateTime DateEnd { get; set; }

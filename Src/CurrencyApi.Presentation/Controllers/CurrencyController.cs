@@ -34,10 +34,9 @@ namespace CurrencyApi.Presentation.Controllers
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var result = await _currencyService.GetByIdAsync(id);
-
-            await Task.Delay(1000);
-            return Ok(new Currency("", "", 5, 2));
+            Currency result = await _currencyService.GetByIdAsync(id);
+            
+            return Ok(result);
         }
 
         [HttpPost]

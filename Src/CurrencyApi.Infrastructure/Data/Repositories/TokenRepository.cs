@@ -11,27 +11,12 @@ namespace CurrencyApi.Infrastructure.Data.Repositories
 
         public TokenRepository(ApplicationDbContext dbContext) => _dbContext = dbContext;
 
-        public RefreshToken Get(string id)
-        {
-            throw new System.NotImplementedException();
-        }
-
         public Task<RefreshToken> GetAsync(string id)
         {
             throw new System.NotImplementedException();
         }
 
-        public RefreshToken Add(RefreshToken item)
-        {
-            throw new System.NotImplementedException();
-        }
-
         public Task<RefreshToken> AddAsync(RefreshToken item)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public RefreshToken Update(RefreshToken item)
         {
             throw new System.NotImplementedException();
         }

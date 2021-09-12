@@ -7,7 +7,7 @@ using CurrencyApi.Infrastructure.Data.Repositories;
 
 namespace CurrencyApi.Infrastructure.Data
 {
-    public class UnitOfWork : IUnitOfWork, IDisposable, IAsyncDisposable
+    public class UnitOfWork : IUnitOfWork, IDisposable
     {
         private readonly ApplicationDbContext _dbContext;
 
@@ -23,26 +23,20 @@ namespace CurrencyApi.Infrastructure.Data
         public ITokenRepository Tokens { get; }
         public IUserRepository Users { get; }
         public ICurrencyRepository Currencies { get; }
-        public int Commit() => _dbContext.SaveChanges();
         public async Task<int> CommitAsync() => await _dbContext.SaveChangesAsync();
 
         private void Dispose(bool disposing)
         {
-            if (disposing)
-            {
-                _dbContext.Dispose();
-            }
+            if (!disposing)
+                return;
+
+            // _dbContext.Dispose();
         }
 
         public void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
-        }
-
-        public async ValueTask DisposeAsync()
-        {
-            await _dbContext.DisposeAsync();
         }
     }
 }

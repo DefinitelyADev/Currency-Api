@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace CurrencyApi.Application.Results
+﻿namespace CurrencyApi.Application.Results.AuthenticationResults
 {
     public class AuthenticationResult : ResultBase
     {

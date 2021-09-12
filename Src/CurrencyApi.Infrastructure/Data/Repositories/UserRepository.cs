@@ -14,17 +14,7 @@ namespace CurrencyApi.Infrastructure.Data.Repositories
 
         public UserRepository(ApplicationDbContext dbContext) => _dbContext = dbContext;
 
-        public PagedResult<User> Find(Expression<Func<User, bool>> predicate)
-        {
-            throw new NotImplementedException();
-        }
-
         public Task<PagedResult<User>> FindAsync(Expression<Func<User, bool>> predicate)
-        {
-            throw new NotImplementedException();
-        }
-
-        public User GetById(string id)
         {
             throw new NotImplementedException();
         }
@@ -34,17 +24,7 @@ namespace CurrencyApi.Infrastructure.Data.Repositories
             throw new NotImplementedException();
         }
 
-        public User Add(User item)
-        {
-            throw new NotImplementedException();
-        }
-
         public Task<User> AddAsync(User item)
-        {
-            throw new NotImplementedException();
-        }
-
-        public User Update(User item)
         {
             throw new NotImplementedException();
         }
@@ -54,17 +34,7 @@ namespace CurrencyApi.Infrastructure.Data.Repositories
             throw new NotImplementedException();
         }
 
-        public bool Remove(string id)
-        {
-            throw new NotImplementedException();
-        }
-
         public Task<bool> RemoveAsync(string id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public User GetByUsername(string username)
         {
             throw new NotImplementedException();
         }

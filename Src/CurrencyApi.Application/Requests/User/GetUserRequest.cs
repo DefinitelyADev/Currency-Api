@@ -2,7 +2,7 @@
 {
     public class GetUserRequest
     {
-        public string Name { get; set; }
-        public string Username { get; set; }
+        public string? Name { get; set; }
+        public string? Username { get; set; }
     }
 }
