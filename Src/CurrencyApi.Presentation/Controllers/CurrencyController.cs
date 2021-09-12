@@ -6,6 +6,7 @@ using CurrencyApi.Application.Responses;
 using CurrencyApi.Application.Results;
 using CurrencyApi.Application.Results.CurrencyResults;
 using CurrencyApi.Domain.Entities;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CurrencyApi.Presentation.Controllers
@@ -21,6 +22,8 @@ namespace CurrencyApi.Presentation.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(PagedResult<Currency>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Response<GetCurrencyRequest>), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Get([FromQuery] GetCurrencyRequest request)
         {
             PagedResult<Currency> result = await _currencyService.GetAsync(request);
@@ -32,6 +35,7 @@ namespace CurrencyApi.Presentation.Controllers
         }
 
         [HttpGet("{id:int}")]
+        [ProducesResponseType(typeof(Currency), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetById(int id)
         {
             Currency result = await _currencyService.GetByIdAsync(id);
@@ -40,6 +44,8 @@ namespace CurrencyApi.Presentation.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(typeof(CreateCurrencyResult), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(Response<CreateCurrencyRequest>), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Create([FromBody] CreateCurrencyRequest request)
         {
             CreateCurrencyResult result = await _currencyService.CreateAsync(request);
@@ -52,6 +58,8 @@ namespace CurrencyApi.Presentation.Controllers
         }
 
         [HttpPut("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(Response<UpdateCurrencyRequest>), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Update(int id, UpdateCurrencyRequest request)
         {
             UpdateCurrencyResult result = await _currencyService.UpdateAsync(id, request);
@@ -63,6 +71,8 @@ namespace CurrencyApi.Presentation.Controllers
         }
 
         [HttpDelete("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(Response<object>), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Delete(int id)
         {
             DeleteCurrencyResult result = await _currencyService.DeleteAsync(id);

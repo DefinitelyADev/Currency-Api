@@ -3,6 +3,7 @@ using CurrencyApi.Application.Interfaces.Services;
 using CurrencyApi.Application.Requests.Authentication;
 using CurrencyApi.Application.Results.AuthenticationResults;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CurrencyApi.Presentation.Controllers
@@ -18,6 +19,8 @@ namespace CurrencyApi.Presentation.Controllers
         }
 
         [HttpPost("login")]
+        [ProducesResponseType(typeof(AuthenticationResult), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(AuthenticationResult), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> LoginAsync([FromBody] LoginRequest request)
         {
             AuthenticationResult result = await _authenticationService.LoginAsync(request);
@@ -29,6 +32,8 @@ namespace CurrencyApi.Presentation.Controllers
         }
 
         [HttpPost("refresh-token")]
+        [ProducesResponseType(typeof(AuthenticationResult), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(AuthenticationResult), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> RefreshTokenAsync([FromBody] RefreshTokenRequest request)
         {
             AuthenticationResult result = await _authenticationService.RefreshTokenAsync(request);

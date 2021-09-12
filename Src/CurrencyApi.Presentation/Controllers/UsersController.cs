@@ -7,6 +7,7 @@ using CurrencyApi.Application.Responses;
 using CurrencyApi.Application.Results;
 using CurrencyApi.Application.Results.UserResults;
 using CurrencyApi.Domain.Entities;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CurrencyApi.Presentation.Controllers
@@ -19,6 +20,8 @@ namespace CurrencyApi.Presentation.Controllers
         public UsersController(IUserService userService) => _userService = userService;
 
         [HttpGet]
+        [ProducesResponseType(typeof(PagedResult<User>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Response<GetUserRequest>), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Get([FromQuery] GetUserRequest request)
         {
             PagedResult<User> result = await _userService.GetAsync(request);
@@ -30,6 +33,7 @@ namespace CurrencyApi.Presentation.Controllers
         }
 
         [HttpGet("{id:guid}")]
+        [ProducesResponseType(typeof(User), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetById(Guid id)
         {
             User result = await _userService.GetByIdAsync(id.ToString());
@@ -38,6 +42,8 @@ namespace CurrencyApi.Presentation.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(typeof(CreateUserResult), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(Response<CreateUserRequest>), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Create([FromBody] CreateUserRequest request)
         {
             CreateUserResult result = await _userService.CreateAsync(request);
@@ -50,12 +56,14 @@ namespace CurrencyApi.Presentation.Controllers
         }
 
         [HttpPost("update-password")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(Response<ChangePasswordRequest>), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> UpdatePassword([FromBody] ChangePasswordRequest request)
         {
             string? username = HttpContext.User.Identity?.Name;
 
             if (string.IsNullOrWhiteSpace(username))
-                return BadRequest(new Response<CreateUserRequest>("Username is invalid."));
+                return BadRequest(new Response<ChangePasswordRequest>(request, "Username is invalid."));
 
             UpdatePasswordResult result = await _userService.UpdatePasswordAsync(username, request);
 
@@ -67,6 +75,8 @@ namespace CurrencyApi.Presentation.Controllers
         }
 
         [HttpDelete("{id:guid}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(Response<object>), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Delete(Guid id)
         {
             DeleteUserResult result = await _userService.DeleteAsync(id.ToString());

@@ -7,6 +7,7 @@ using CurrencyApi.Application.Results;
 using CurrencyApi.Application.Results.CurrencyRateResults;
 using CurrencyApi.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CurrencyApi.Presentation.Controllers
@@ -22,6 +23,8 @@ namespace CurrencyApi.Presentation.Controllers
         }
 
         [HttpGet, Authorize(Roles = "admin,user")]
+        [ProducesResponseType(typeof(PagedResult<CurrencyRate>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Response<GetCurrencyRateRequest>), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Get([FromQuery] GetCurrencyRateRequest request)
         {
             PagedResult<CurrencyRate> result = await _currencyRateService.GetAsync(request);
@@ -33,6 +36,7 @@ namespace CurrencyApi.Presentation.Controllers
         }
 
         [HttpGet("{id:int}"), Authorize(Roles = "admin,user")]
+        [ProducesResponseType(typeof(CurrencyRate), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetById(int id)
         {
             CurrencyRate result = await _currencyRateService.GetByIdAsync(id);
@@ -41,6 +45,7 @@ namespace CurrencyApi.Presentation.Controllers
         }
 
         [HttpGet("{originCurrencyId:int}/{targetCurrencyId:int}"), Authorize(Roles = "admin,user")]
+        [ProducesResponseType(typeof(CurrencyRate), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetByIds(int originCurrencyId, int targetCurrencyId)
         {
             CurrencyRate result = await _currencyRateService.GetByIdsAsync(originCurrencyId, targetCurrencyId);
@@ -49,6 +54,7 @@ namespace CurrencyApi.Presentation.Controllers
         }
 
         [HttpGet("calculate/{originCurrencyId:int}/{targetCurrencyId:int}"), Authorize(Roles = "admin,user")]
+        [ProducesResponseType(typeof(CalculationResult), StatusCodes.Status200OK)]
         public async Task<IActionResult> CalculateByIdsAsync(int originCurrencyId, int targetCurrencyId, [FromQuery] decimal amount)
         {
             CalculationResult result = await _currencyRateService.CalculateByIdsAsync(originCurrencyId, targetCurrencyId, amount);
@@ -57,6 +63,8 @@ namespace CurrencyApi.Presentation.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(typeof(CreateCurrencyRateResult), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(Response<CreateCurrencyRateRequest>), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Create([FromBody] CreateCurrencyRateRequest request)
         {
             CreateCurrencyRateResult result = await _currencyRateService.CreateAsync(request);
@@ -69,6 +77,8 @@ namespace CurrencyApi.Presentation.Controllers
         }
 
         [HttpPut("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(Response<UpdateCurrencyRateRequest>), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Update(int id, UpdateCurrencyRateRequest request)
         {
             UpdateCurrencyRateResult result = await _currencyRateService.UpdateAsync(id, request);
@@ -80,6 +90,8 @@ namespace CurrencyApi.Presentation.Controllers
         }
 
         [HttpDelete("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(Response<object>), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Delete(int id)
         {
             DeleteCurrencyRateResult result = await _currencyRateService.DeleteAsync(id);
