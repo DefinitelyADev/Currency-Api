@@ -45,17 +45,7 @@ namespace CurrencyApi.Infrastructure.Services
             if (creationResult.Succeeded && roleResult.Succeeded)
                 return new CreateUserResult { Data = user, Succeeded = true };
 
-            List<string> errors = creationResult.Errors
-                .Select(error => error.Description)
-                .Concat(roleResult.Errors.Select(error => error.Description))
-                .ToList();
-
-            return new CreateUserResult
-            {
-                Errors = errors,
-                Succeeded = false
-            };
-
+            throw new IdentityResultException(creationResult.Errors.Concat(roleResult.Errors).ToList());
         }
 
         public async Task<DeleteUserResult> DeleteAsync(string id)
