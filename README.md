@@ -21,6 +21,8 @@ Example data configuration file:
 
 ## Using
 
+Note: There is no need for pre-installing a runtime as the executables are bulit as self-contained
+
 ### Windows
 
 1. Download the windows archive from the releases page
